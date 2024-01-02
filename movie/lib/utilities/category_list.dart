@@ -12,8 +12,6 @@ class CategoryList extends ChangeNotifier {
     Category(text: 'Coming Soon', searchId: 'upcoming'),
     Category(text: 'Popular', searchId: 'popular'),
     Category(text: 'Top rated', searchId: 'top_rated'),
-    // Category(text: 'Horror'),
-    // Category(text: 'Romantic'),
   ];
   List<Widget> activeList = [
     MovieBar(
@@ -33,6 +31,10 @@ class CategoryList extends ChangeNotifier {
       searchId: 'top_rated',
     ),
   ];
+  void refreshActiveList() {
+    notifyListeners();
+  }
+
   String get title => category[active].text;
   String get searchId => category[active].searchId;
 

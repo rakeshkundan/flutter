@@ -1,60 +1,59 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:movie/data/app_title.dart';
+import 'package:movie/components/app_title.dart';
+import 'package:movie/data/contact_detail.dart';
+import 'package:movie/models/database.dart';
 import 'package:movie/screen/chat_screen.dart';
-import 'package:movie/widgets/bottom_nav_bar.dart';
+import 'package:provider/provider.dart';
 
 class MessageScreen extends StatelessWidget {
   static String id = 'message_screen';
+
   const MessageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        bottom: false,
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                AppTitle(
-                  titleText: 'Messages',
-                  titleIcon: Icons.mail_outline,
-                ),
-                Expanded(
-                  child: ListView(
-                    children: [
-                      ContactTile(),
-                      ContactTile(),
-                      ContactTile(),
-                      ContactTile(),
-                      ContactTile(),
-                      ContactTile(),
-                      ContactTile(),
-                      ContactTile(),
-                      ContactTile(),
-                      ContactTile(),
-                    ],
-                  ),
-                ),
-              ],
+    return SafeArea(
+      bottom: false,
+      child: Column(
+        children: [
+          AppTitle(
+            titleText: 'Messages',
+            titleIcon: Icons.mail_outline,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: Provider.of<ContactDetail>(context).contactList.length,
+              itemBuilder: (context, index) {
+                var data =
+                    Provider.of<ContactDetail>(context).contactList[index];
+                return ContactTile(
+                  name: data['cname'],
+                  lastMessage: data['lmessage'],
+                  unreadCount: data['unreadCount'],
+                  number: data['cnum'],
+                );
+              },
             ),
-            Positioned(
-              bottom: 25.0,
-              left: 0.0,
-              right: 0.0,
-              child: BottomNavBar(),
-            )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
 class ContactTile extends StatelessWidget {
-  const ContactTile({super.key});
+  final String name;
+  final int unreadCount;
+  final String lastMessage;
+  final String number;
+  const ContactTile(
+      {super.key,
+      this.name = '',
+      this.lastMessage = '',
+      this.unreadCount = 0,
+      required this.number});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +77,7 @@ class ContactTile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    'Rakesh kundan',
+                    name,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -88,19 +87,21 @@ class ContactTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Divyanshu: hii',
+                        lastMessage,
                         style: TextStyle(
                           color: Color(0xff39c4a6),
                         ),
                       ),
-                      CircleAvatar(
-                        radius: 15,
-                        backgroundColor: Colors.red,
-                        child: Text(
-                          '32',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
+                      (unreadCount > 0)
+                          ? CircleAvatar(
+                              radius: 15,
+                              backgroundColor: Colors.red,
+                              child: Text(
+                                '$unreadCount',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            )
+                          : SizedBox(),
                     ],
                   ),
                 ],

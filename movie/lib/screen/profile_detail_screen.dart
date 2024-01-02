@@ -17,9 +17,13 @@ class ProfileDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        scrolledUnderElevation: 0.0,
+      ),
       body: SafeArea(
-        child: Padding(
+        // top: false,
+        child: SingleChildScrollView(
           padding: EdgeInsets.only(left: 10.0),
           child: Column(
             // crossAxisAlignment: CrossAxisAlignment.stretch,

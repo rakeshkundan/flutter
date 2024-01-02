@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:movie/constants.dart';
 import 'package:movie/screen/search_result.dart';
 import 'package:movie/services/networking.dart';

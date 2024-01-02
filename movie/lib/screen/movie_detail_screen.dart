@@ -1251,12 +1251,60 @@ class RowIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(10.0),
-      child: Icon(
-        iconData,
-        size: 30.0,
-        color: kIconColor,
+    return RawMaterialButton(
+      constraints: BoxConstraints(minHeight: 0, minWidth: 0),
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return Padding(
+                padding: EdgeInsets.all(20),
+                child: SimpleDialog(
+                  children: [
+                    ////////This is still to be designed
+                    SimpleDialogOption(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'operation 1',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    SimpleDialogOption(
+                      child: Text('operation 2'),
+                    ),
+                    SimpleDialogOption(
+                      child: Text('operation 2'),
+                    ),
+                    RawMaterialButton(
+                      highlightColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      // splashColor: Colors.transparent,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    )
+                    ////////This is still to be designed
+                  ],
+                ),
+              );
+            });
+      },
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Icon(
+          iconData,
+          size: 30.0,
+          color: kIconColor,
+        ),
       ),
     );
   }

@@ -82,7 +82,7 @@ class BottomNavTile extends StatelessWidget {
             TextButton(
               onPressed: () {
                 Provider.of<StateData>(context, listen: false).setActive(index);
-                Navigator.pop(context);
+                // Navigator.pop(context);
                 Navigator.pushNamed(
                   context,
                   id,

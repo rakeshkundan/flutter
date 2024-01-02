@@ -6,7 +6,7 @@ import 'package:movie/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileData extends ChangeNotifier {
-  Map<String, String> profile = {'Name': '', 'About': '', 'Phone': ''};
+  Map<String, String> profile = {'Name': 'Username', 'About': '', 'Phone': ''};
   bool profileSet = false;
   Future<void> setData() async {
     DatabaseHelper dbHelp = DatabaseHelper.instance;
@@ -42,10 +42,10 @@ class ProfileData extends ChangeNotifier {
   String? get about => profile['About'];
   String? get phone => profile['Phone'];
   bool get isProfileSet => profileSet;
-  Future<void> setIsProfileSet() async {
+  Future<void> setIsProfileSet(bool val) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setBool('profileSet', true);
+    prefs.setBool('profileSet', val);
     await setData();
-    profileSet = true;
+    profileSet = val;
   }
 }

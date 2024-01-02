@@ -25,6 +25,9 @@ class CategoryTile extends StatelessWidget {
               ),
       ),
       child: TextButton(
+        style: TextButton.styleFrom(
+          minimumSize: Size(0, 0),
+        ),
         onPressed: onPress,
         child: Text(
           text,

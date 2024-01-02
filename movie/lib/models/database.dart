@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_declarations, unused_field
+// ignore_for_file: prefer_const_declarations, unused_field, avoid_print
 
 import 'package:movie/models/contact.dart';
 import 'package:movie/models/user.dart';
@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
-  static final _databaseName = 'card.db';
+  static final _databaseName = 'Movie.db';
   static final _databaseVersion = 1;
   static final userTable = 'User';
   static final name = 'name';
@@ -104,5 +104,25 @@ class DatabaseHelper {
   Future<int> deleteUser(String phone) async {
     Database db = await instance.database;
     return await db.delete(userTable, where: '$phone = ?', whereArgs: [phone]);
+  }
+
+  Future<bool> deleteDb() async {
+    bool databaseDeleted = false;
+
+    try {
+      String path = join(await getDatabasesPath(), _databaseName);
+      await deleteDatabase(path).whenComplete(() {
+        databaseDeleted = true;
+        _database = null;
+      }).catchError((onError) {
+        databaseDeleted = false;
+      });
+    } on DatabaseException catch (error) {
+      print(error);
+    } catch (error) {
+      print(error);
+    }
+
+    return databaseDeleted;
   }
 }

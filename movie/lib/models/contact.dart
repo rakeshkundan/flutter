@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Contact {
   late String name;
   late String phone;

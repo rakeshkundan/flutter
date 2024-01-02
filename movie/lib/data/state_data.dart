@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import
 
 import 'package:flutter/material.dart';
+import 'package:movie/screen/loading_screen.dart';
 import 'package:movie/utilities/bottom_tile_info.dart';
 import 'package:movie/screen/home_screen.dart';
 import 'package:movie/screen/circle_screen.dart';
@@ -54,7 +55,7 @@ class StateData extends ChangeNotifier {
       tileTitle: 'Messages',
       icon: FontAwesomeIcons.message,
       isActive: false,
-      id: MessageScreen.id,
+      id: LoadingScreen.id,
     ),
     BottomTileInfo(
       tileTitle: 'Profile',

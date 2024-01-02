@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:movie/screen/home.dart';
 import 'package:movie/screen/home_screen.dart';
 import 'package:provider/provider.dart';
 import '../components/category_tile.dart';
@@ -27,7 +28,7 @@ class CategoryBar extends StatelessWidget {
                   Provider.of<CategoryList>(context, listen: false)
                       .setActive(index);
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, HomeScreen.id);
+                  Navigator.pushNamed(context, Home.id);
                 },
               );
             },
