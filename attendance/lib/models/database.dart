@@ -1,24 +1,24 @@
-// ignore_for_file: prefer_const_declarations, unused_field, avoid_print
+// ignore_for_file: prefer_const_declarations, unused_field, avoid_print, unused_import
 
-import 'package:movie/models/contact.dart';
-import 'package:movie/models/user.dart';
+import 'package:attendance/models/contact.dart';
+import 'package:attendance/models/user.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
-  static final _databaseName = 'Movie.db';
+  static final _databaseName = 'Attendance.db';
   static final _databaseVersion = 1;
   static final userTable = 'User';
   static final name = 'name';
-  static final about = 'about';
-  static final phone = 'phone';
+  static final department = 'department';
+  static final employeeId = 'employeeId';
   static final email = 'email';
-  static final contactTable = 'Contacts';
-  static final contactName = 'cname';
-  static final contactNumber = 'cnum';
-  static final lastMessage = 'lmessage';
-  static final unreadMessage = 'unreadCount';
-  static final time = 'lmessageTime';
+  // static final contactTable = 'Contacts';
+  // static final contactName = 'cname';
+  // static final contactNumber = 'cnum';
+  // static final lastMessage = 'lmessage';
+  // static final unreadMessage = 'unreadCount';
+  // static final time = 'lmessageTime';
 
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -41,37 +41,38 @@ class DatabaseHelper {
     await db.execute('''
           CREATE TABLE $userTable (
             $name TEXT,
-            $phone TEXT PRIMARY KEY NOT NULL,
-            $about TEXT )''');
+            $employeeId TEXT PRIMARY KEY NOT NULL,
+            $department TEXT )''');
 
-    await db.execute('''
-    CREATE TABLE $contactTable(
-    $contactName TEXT,
-    $contactNumber TEXT PRIMARY KEY ,
-    $lastMessage TEXT,
-    $unreadMessage INTEGER,
-    $time TEXT
-    )
-    ''');
+    // await db.execute('''
+    // CREATE TABLE $contactTable(
+    // $contactName TEXT,
+    // $contactNumber TEXT PRIMARY KEY ,
+    // $lastMessage TEXT,
+    // $unreadMessage INTEGER,
+    // $time TEXT
+    // )
+    // ''');
   }
 
-  Future<int> insertContact(Contact contact) async {
-    Database db = await instance.database;
-    return await db.insert(contactTable, contact.toMap());
-  }
+  //
+  // Future<int> insertContact(Contact contact) async {
+  //   Database db = await instance.database;
+  //   return await db.insert(contactTable, contact.toMap());
+  // }
 
-  Future<List<Map<String, dynamic>>> querryAllContact() async {
-    Database db = await instance.database;
-    return await db.query(contactTable);
-  }
+  // Future<List<Map<String, dynamic>>> querryAllContact() async {
+  //   Database db = await instance.database;
+  //   return await db.query(contactTable);
+  // }
 
   Future<int> insertUser(User user) async {
     // print('i an here');
     Database db = await instance.database;
     return await db.insert(userTable, {
       'name': user.name,
-      'phone': user.phone,
-      'about': user.about,
+      'employeeId': user.employeeId,
+      'department': user.department,
     });
   }
 
@@ -96,14 +97,15 @@ class DatabaseHelper {
 
   Future<int> updateUser(User user) async {
     Database db = await instance.database;
-    String id = user.toMap()['phone'];
-    return await db
-        .update(userTable, user.toMap(), where: '$phone = ?', whereArgs: [id]);
+    String id = user.toMap()['employeeId'];
+    return await db.update(userTable, user.toMap(),
+        where: '$employeeId = ?', whereArgs: [id]);
   }
 
-  Future<int> deleteUser(String phone) async {
+  Future<int> deleteUser(String employeeId) async {
     Database db = await instance.database;
-    return await db.delete(userTable, where: '$phone = ?', whereArgs: [phone]);
+    return await db
+        .delete(userTable, where: '$employeeId = ?', whereArgs: [employeeId]);
   }
 
   Future<bool> deleteDb() async {

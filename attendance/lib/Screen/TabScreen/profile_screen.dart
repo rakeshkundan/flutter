@@ -1,11 +1,14 @@
+// ignore_for_file: unused_import, unused_local_variable
+
+import 'package:attendance/Screen/initial_screen.dart';
 import 'package:attendance/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance/Data/profile_data.dart';
 import 'package:attendance/models/database.dart';
 import 'package:attendance/screen/profile_detail_screen.dart';
-import 'package:attendance/Utilities/session.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class ProfileScreen extends StatelessWidget {
@@ -22,6 +25,9 @@ class ProfileScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          const SizedBox(
+            height: 30,
+          ),
           GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, ProfileDetailScreen.id);
@@ -46,20 +52,20 @@ class ProfileScreen extends StatelessWidget {
               maxLines: 2,
             ),
           ),
-          TextButton(
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.all(0),
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, ProfileDetailScreen.id);
-            },
-            child: const Text(
-              'View Profile',
-              style: TextStyle(
-                color: kInactiveTextColor,
-              ),
-            ),
-          ),
+          // TextButton(
+          //   style: TextButton.styleFrom(
+          //     padding: const EdgeInsets.all(0),
+          //   ),
+          //   onPressed: () {
+          //     Navigator.pushNamed(context, ProfileDetailScreen.id);
+          //   },
+          //   child: const Text(
+          //     'View Profile',
+          //     style: TextStyle(
+          //       color: kInactiveTextColor,
+          //     ),
+          //   ),
+          // ),
           const SizedBox(
             height: 30,
           ),
@@ -119,44 +125,51 @@ class ProfileScreen extends StatelessWidget {
                                   DatabaseHelper dbHelp =
                                       DatabaseHelper.instance;
                                   bool flag = await dbHelp.deleteDb();
-                                  http.Response response = await http.get(
-                                    Uri.parse(
-                                      "http://localhost:3000/logout",
-                                    ),
-                                  );
-                                  if (response.statusCode == 200) {
-                                    if (!context.mounted) return;
-                                    Provider.of<Session>(context, listen: false)
-                                        .updateCookie(response);
-                                  }
+                                  // http.Response response = await http.get(
+                                  //   Uri.parse(
+                                  //     "http://localhost:3000/logout",
+                                  //   ),
+                                  // );
+                                  SharedPreferences prefs =
+                                      await SharedPreferences.getInstance();
+                                  // if (response.statusCode == 200) {
+                                  await prefs.setBool('isLoggedIn', false);
+                                  if (!context.mounted) return;
+                                  Navigator.popUntil(context, (route) => false);
+                                  Navigator.pushNamed(
+                                      context, InitialScreen.id);
+                                  // if (!context.mounted) return;
+                                  // Provider.of<Session>(context, listen: false)
+                                  //     .updateCookie(response);
+                                  // }
 
-                                  if (flag) {
-                                    if (!context.mounted) return;
-                                    Provider.of<ProfileData>(context,
-                                            listen: false)
-                                        .setIsProfileSet(false);
-                                    Navigator.pop(context);
-                                  } else {
-                                    if (!context.mounted) return;
-                                    Navigator.pop(context);
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            title: const Text('Error!!'),
-                                            content: const Text(
-                                                'Some Unexpected Error.Please restart the app.'),
-                                            actions: [
-                                              RawMaterialButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Text('ok'),
-                                              ),
-                                            ],
-                                          );
-                                        });
-                                  }
+                                  // if (flag) {
+                                  //   if (!context.mounted) return;
+                                  //   Provider.of<ProfileData>(context,
+                                  //           listen: false)
+                                  //       .setIsProfileSet(false);
+                                  //   Navigator.pop(context);
+                                  // } else {
+                                  //   if (!context.mounted) return;
+                                  //   Navigator.pop(context);
+                                  //   showDialog(
+                                  //       context: context,
+                                  //       builder: (context) {
+                                  //         return AlertDialog(
+                                  //           title: const Text('Error!!'),
+                                  //           content: const Text(
+                                  //               'Some Unexpected Error.Please restart the app.'),
+                                  //           actions: [
+                                  //             RawMaterialButton(
+                                  //               onPressed: () {
+                                  //                 Navigator.pop(context);
+                                  //               },
+                                  //               child: Text('ok'),
+                                  //             ),
+                                  //           ],
+                                  //         );
+                                  //       });
+                                  // }
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(

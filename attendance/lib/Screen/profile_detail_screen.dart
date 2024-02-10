@@ -30,6 +30,7 @@ class ProfileDetailScreen extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 70,
+                backgroundColor: Colors.transparent,
                 child: Image.asset('assets/images/manit_logo.jpg'),
               ),
               SizedBox(
@@ -43,16 +44,16 @@ class ProfileDetailScreen extends StatelessWidget {
                     'This is not your pin or username.This Name Will be visible to Your Friends',
               ),
               InputRow(
-                title: 'About',
-                icon: FontAwesomeIcons.circleInfo,
-                initialData: Provider.of<ProfileData>(context).about!,
+                title: 'Branch',
+                icon: FontAwesomeIcons.codeBranch,
+                initialData: Provider.of<ProfileData>(context).department!,
               ),
               InputRow(
-                title: 'Phone',
-                icon: Icons.phone,
-                initialData: Provider.of<ProfileData>(context).phone!,
+                title: 'Employee Code',
+                icon: Icons.numbers,
+                initialData: Provider.of<ProfileData>(context).employeeId!,
                 divider: false,
-              )
+              ),
             ],
           ),
         ),
@@ -108,45 +109,13 @@ class InputRow extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: TextField(
-                      style: TextStyle(fontSize: 20),
-                      controller: TextEditingController(text: initialData),
-                      keyboardType: TextInputType.name,
-                      onSubmitted: (value) async {
-                        Provider.of<ProfileData>(context, listen: false)
-                            .updateData(title, value);
-                      },
-                      cursorColor: Colors.white,
-                      readOnly: !Provider.of<StateData>(context).getEdit(title),
-                      decoration: InputDecoration(
-                        enabled: true,
-                        labelStyle: TextStyle(
-                          fontSize: 30,
-                          color: Colors.white,
-                        ),
-                        focusedBorder:
-                            Provider.of<StateData>(context).getEdit(title)
-                                ? UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white))
-                                : InputBorder.none,
-                        enabledBorder:
-                            Provider.of<StateData>(context).getEdit(title)
-                                ? UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white))
-                                : InputBorder.none,
-                        disabledBorder: InputBorder.none,
-                        focusColor: Colors.white,
+                    child: Text(
+                      initialData,
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey.shade700,
+                        fontWeight: FontWeight.w500,
                       ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Provider.of<StateData>(context, listen: false)
-                          .setEdit(title);
-                    },
-                    child: Icon(
-                      Icons.edit,
-                      color: Colors.white,
                     ),
                   ),
                 ],
@@ -162,9 +131,6 @@ class InputRow extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-              ),
-              SizedBox(
-                height: 10,
               ),
               divider ? Divider() : SizedBox(),
             ],
