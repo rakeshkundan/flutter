@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_print
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_print, unused_import
 
 import 'package:attendance/Data/profile_data.dart';
 import 'package:attendance/Data/state_data.dart';
@@ -270,12 +270,16 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                   Provider.of<TimeTable>(context, listen: false)
                                       .setProgressBar(true);
                                   NetworkHelper nethelp = NetworkHelper(
-                                      url:
-                                          '$kScheduleLink?d=${Provider.of<StateData>(context, listen: false).selected.weekday}&employeeId=${Provider.of<ProfileData>(context, listen: false).employeeId}');
+                                    url:
+                                        "$kScheduleLink?day=${Provider.of<StateData>(context, listen: false).selectedDay.weekday}",
+                                    head: true,
+                                  );
                                   var data = await nethelp.getData();
                                   if (!mounted) return;
-                                  Provider.of<TimeTable>(context, listen: false)
+                                  await Provider.of<TimeTable>(context,
+                                          listen: false)
                                       .setSchedule(data);
+                                  if (!mounted) return;
                                   Provider.of<TimeTable>(context, listen: false)
                                       .setProgressBar(false);
                                 },

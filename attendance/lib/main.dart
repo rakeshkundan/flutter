@@ -4,6 +4,7 @@ import 'package:attendance/Data/profile_data.dart';
 import 'package:attendance/Data/state_data.dart';
 import 'package:attendance/Data/student_detail.dart';
 import 'package:attendance/Data/time_table.dart';
+import 'package:attendance/Screen/attendance_download_screen.dart';
 import 'package:attendance/Screen/attendance_screen.dart';
 import 'package:attendance/Screen/initial_screen.dart';
 import 'package:attendance/Screen/intro_screen.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
           ProfileScreen.id: (context) => ProfileScreen(),
           LoadingScreen.id: (context) => const LoadingScreen(),
           DashboardScreen.id: (context) => DashboardScreen(),
+          AttendanceDownloadScreen.id: (context) => AttendanceDownloadScreen(),
           AttendanceScreen.id: (context) => AttendanceScreen(),
           ProfileDetailScreen.id: (context) => ProfileDetailScreen(),
         },

@@ -32,8 +32,12 @@ class _InitialScreenState extends State<InitialScreen> {
         head: true,
       );
 
-      await Provider.of<TimeTable>(context, listen: false)
-          .setSchedule(await nethelp.getData());
+      var data = await nethelp.getData();
+
+      // if (data != " Network Error") {
+      if (!mounted) return;
+      await Provider.of<TimeTable>(context, listen: false).setSchedule(data);
+      // }
       if (!mounted) return;
       Navigator.popAndPushNamed(context, Home.id);
     } else {

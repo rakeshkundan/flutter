@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, unused_import, unnecessary_import, avoid_unnecessary_containers
 
+import 'package:attendance/Screen/attendance_download_screen.dart';
 import 'package:attendance/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,19 +29,24 @@ class DashboardScreen extends StatelessWidget {
               children: [
                 DashboardCard(
                   onClick: () {
-                    print("hello");
+                    Navigator.pushNamed(context, AttendanceDownloadScreen.id);
                   },
+                  icon: Icons.poll_outlined,
+                  title: "Attendance",
                 ),
-                DashboardCard(),
-                DashboardCard(),
-                DashboardCard(),
-                DashboardCard(),
-                DashboardCard(),
-                DashboardCard(),
-                DashboardCard(),
-                DashboardCard(),
-                DashboardCard(),
-                DashboardCard(),
+                DashboardCard(
+                  icon: Icons.analytics,
+                  title: "Analysis",
+                ),
+                // DashboardCard(),
+                // DashboardCard(),
+                // DashboardCard(),
+                // DashboardCard(),
+                // DashboardCard(),
+                // DashboardCard(),
+                // DashboardCard(),
+                // DashboardCard(),
+                // DashboardCard(),
               ],
             ),
           ),
@@ -85,7 +91,7 @@ class DashboardCard extends StatelessWidget {
                     radius: .08 * width,
                     backgroundColor: Colors.transparent,
                     child: Icon(
-                      Icons.auto_graph,
+                      icon,
                       size: .1 * width,
                       color: kInactiveTextColor,
                     ),
