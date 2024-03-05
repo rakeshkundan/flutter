@@ -5,6 +5,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:local_captcha/local_captcha.dart';
 
 class StateData extends ChangeNotifier {
+  ///////Attendance Count/////
+  int? classCount;
+  void setClassCount(int? count) {
+    classCount = count;
+    notifyListeners();
+  }
+
+  int? get getClassCount => classCount;
   ///////?Captcha/////
 
   final localCaptcha = LocalCaptchaController();
@@ -42,6 +50,7 @@ class StateData extends ChangeNotifier {
   Future<void> setDay(DateTime selected, DateTime focused) async {
     selectedDay = selected;
     focusedDay = focused;
+
     // print(selected.weekday);
     notifyListeners();
   }

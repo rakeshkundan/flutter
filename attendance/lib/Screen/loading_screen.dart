@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:attendance/Data/student_detail.dart';
-import 'package:attendance/Screen/attendance_screen.dart';
+import 'package:attendance/Screen/SupportScreen/attendance_screen.dart';
 import 'package:attendance/Utilities/networking.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

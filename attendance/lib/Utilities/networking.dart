@@ -9,7 +9,7 @@ class NetworkHelper {
   Map<String, String> headers = {
     'user-agent': 'Dart/3.2 (dart:io)',
     'accept-encoding': 'gzip',
-    'host': 'https://n1znsm3p-80.inc1.devtunnels.ms'
+    'host': 'http://10.3.1.6'
   };
   final bool head;
   NetworkHelper({required this.url, this.head = false});
@@ -29,7 +29,7 @@ class NetworkHelper {
         // print(jsonDecode(data));
         return jsonDecode(data);
       } else {
-        // print(jsonDecode(response.body));
+        print(jsonDecode(response.body));
         return "Network Error";
       }
     } catch (e) {
@@ -38,17 +38,35 @@ class NetworkHelper {
     }
   }
 
-  Future postData(String postUrl, String phone, String pass) async {
-    print(phone + pass);
-    http.Response response = await http.post(Uri.parse(postUrl),
-        headers: {"content-type": "application/json"},
-        body: jsonEncode({'phone': phone, 'password': pass}));
-    if (response.statusCode == 200) {
-      String data = response.body;
-      updateCookie(response);
-      return jsonDecode(data);
-    } else {
-      return response.statusCode;
+  Future postData(data) async {
+    try {
+      print(data);
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? authorization = prefs.getString('authorization');
+      headers['authorization'] = authorization!;
+      http.Response response = head
+          ? await http.post(
+              Uri.parse(url),
+              headers: headers,
+              body: data,
+              encoding: Encoding.getByName('utf-8'),
+            )
+          : await http.post(
+              Uri.parse(url),
+              body: data,
+              encoding: Encoding.getByName('utf-8'),
+            );
+      if (response.statusCode == 200) {
+        String data = response.body;
+        // print(jsonDecode(data));
+        return jsonDecode(data);
+      } else {
+        print(jsonDecode(response.body));
+        return "Network Error";
+      }
+    } catch (e) {
+      print(e);
+      return 'Network Error';
     }
   }
 

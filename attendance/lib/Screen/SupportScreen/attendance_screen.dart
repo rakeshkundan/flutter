@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, avoid_print
 
 import 'dart:convert';
 
 import 'package:attendance/Data/profile_data.dart';
+import 'package:attendance/Data/state_data.dart';
 import 'package:attendance/Data/student_detail.dart';
 import 'package:attendance/constants.dart';
 import 'package:attendance/models/student.dart';
@@ -13,7 +14,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AttendanceScreen extends StatelessWidget {
   static String id = 'attendance_screen';
-  const AttendanceScreen({super.key});
+  AttendanceScreen({super.key});
+  int? count;
+  String? subjectId;
+  String? branch;
+  String? section;
 
   List<Widget> studentList(List<Student> list, BuildContext context, var info) {
     List<Widget> data = [
@@ -77,6 +82,35 @@ class AttendanceScreen extends StatelessWidget {
       );
     }
     data.add(AbsentStudent());
+    data.add(DropdownButton(
+      value: Provider.of<StateData>(context).getClassCount,
+      hint: Text("Attendance Count"),
+      items: [
+        DropdownMenuItem(
+          value: 0,
+          child: Text("0"),
+        ),
+        DropdownMenuItem(
+          value: 1,
+          child: Text("1"),
+        ),
+        DropdownMenuItem(
+          value: 2,
+          child: Text("2"),
+        ),
+        DropdownMenuItem(
+          value: 3,
+          child: Text("3"),
+        ),
+        DropdownMenuItem(
+          value: 4,
+          child: Text("4"),
+        ),
+      ],
+      onChanged: (e) {
+        Provider.of<StateData>(context, listen: false).setClassCount(e);
+      },
+    ));
     data.add(
       Container(
         margin: EdgeInsets.symmetric(vertical: 20),
@@ -118,9 +152,9 @@ class AttendanceScreen extends StatelessWidget {
                       var employeeId =
                           Provider.of<ProfileData>(context, listen: false)
                               .employeeId;
-                      var section =
-                          Provider.of<StudentDetail>(context, listen: false)
-                              .sectionName;
+                      // var section =
+                      //     Provider.of<StudentDetail>(context, listen: false)
+                      //         .sectionName;
                       var response = await http.post(
                         url,
                         headers: {
@@ -129,18 +163,23 @@ class AttendanceScreen extends StatelessWidget {
                         },
                         body: jsonEncode(
                           {
-                            "subjectId": "65c12ea2c6d5522c1ed4ae45",
-                            "branch": "CSE",
+                            "subjectId": subjectId,
+                            "branch": branch,
                             "data": {
                               "date": DateTime.now().toString(),
                               "attendance": res,
                             },
-                            "section": "01",
+                            "section": section,
+                            "count":
+                                Provider.of<StateData>(context, listen: false)
+                                    .getClassCount,
                           },
                         ),
                       );
                       if (response.statusCode == 200) {
                         if (!context.mounted) return;
+                        Provider.of<StateData>(context, listen: false)
+                            .setClassCount(null);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Successfully saved'),
@@ -156,8 +195,12 @@ class AttendanceScreen extends StatelessWidget {
                             ),
                           ),
                         );
+                        if (!context.mounted) return;
+                        Navigator.pop(context);
+                        return;
                       }
                       if (!context.mounted) return;
+                      Navigator.pop(context);
                       Navigator.pop(context);
                     },
                     child: Text('Yes'),
@@ -190,7 +233,10 @@ class AttendanceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
-    print(arguments);
+    // print(arguments);
+    subjectId = arguments["data"]["subjectId"];
+    branch = arguments["data"]["branch"];
+    section = arguments["data"]["section"];
     return Scaffold(
       appBar: AppBar(
         title: Text(

@@ -17,9 +17,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:attendance/Screen/home.dart';
 import 'package:http/http.dart' as http;
 
-class IntroScreen extends StatelessWidget {
-  static String id = "intro_screen";
-  IntroScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  static String id = "login_screen";
+  LoginScreen({super.key});
   TextEditingController empController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController textControl = TextEditingController();
@@ -51,10 +51,26 @@ class IntroScreen extends StatelessWidget {
                 label: 'Employee Id',
                 textController: empController,
               ),
+
               InputBox(
                 label: 'Password',
                 textController: passController,
                 obscText: true,
+              ),
+              Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    surfaceTintColor: Colors.transparent,
+                    splashFactory: NoSplash.splashFactory,
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    "Forgot Password?",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                ),
               ),
               // Captcha(
               //   captchaController: textControl,
@@ -84,6 +100,40 @@ class IntroScreen extends StatelessWidget {
                 highlightColor: Colors.transparent,
                 splashColor: Colors.transparent,
                 onPressed: () async {
+                  if (empController.text == "" || passController.text == "") {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Alert!'),
+                          content: const Text(
+                              'Employee id or Password cannot be Empty.'),
+                          actions: [
+                            RawMaterialButton(
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  // color: kInactiveTextColor,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0, vertical: 7.0),
+                                child: Text(
+                                  'Ok',
+                                  style: kAlertButtonTextStyle,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                    return;
+                  }
                   Provider.of<TimeTable>(context, listen: false)
                       .setProgressBar(true);
                   // print(textControl.text);
@@ -146,6 +196,8 @@ class IntroScreen extends StatelessWidget {
                     Provider.of<TimeTable>(context, listen: false)
                         .setProgressBar(false);
                   } catch (e) {
+                    Provider.of<TimeTable>(context, listen: false)
+                        .setProgressBar(false);
                     print(e);
                   }
                   // } else {

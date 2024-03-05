@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, unused_import, unnecessary_import, avoid_unnecessary_containers
 
-import 'package:attendance/Screen/attendance_download_screen.dart';
+import 'package:attendance/Screen/SupportScreen/analysis_detail_finder.dart';
+import 'package:attendance/Screen/SupportScreen/analysis_screen.dart';
+import 'package:attendance/Screen/SupportScreen/attendance_download_screen.dart';
 import 'package:attendance/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -35,18 +38,22 @@ class DashboardScreen extends StatelessWidget {
                   title: "Attendance",
                 ),
                 DashboardCard(
+                  onClick: () {
+                    Navigator.pushNamed(context, AnalysisDetailFinderScreen.id);
+                  },
                   icon: Icons.analytics,
-                  title: "Analysis",
+                  title: "Analyse",
                 ),
-                // DashboardCard(),
-                // DashboardCard(),
-                // DashboardCard(),
-                // DashboardCard(),
-                // DashboardCard(),
-                // DashboardCard(),
-                // DashboardCard(),
-                // DashboardCard(),
-                // DashboardCard(),
+                DashboardCard(
+                  icon: Icons.calendar_month_outlined,
+                  title: "Reschedule",
+                  onClick: () {},
+                ),
+                DashboardCard(
+                  onClick: () {},
+                  title: "TimeTable",
+                  icon: FontAwesomeIcons.calendarCheck,
+                ),
               ],
             ),
           ),

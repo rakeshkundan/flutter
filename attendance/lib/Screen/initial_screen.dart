@@ -1,10 +1,13 @@
+// ignore_for_file: unused_import
+
 import 'package:attendance/Data/profile_data.dart';
 import 'package:attendance/Data/state_data.dart';
 import 'package:attendance/Data/time_table.dart';
 import 'package:attendance/Screen/home.dart';
-import 'package:attendance/Screen/intro_screen.dart';
+import 'package:attendance/Screen/Auth/login_screen.dart';
 import 'package:attendance/Utilities/networking.dart';
 import 'package:attendance/constants.dart';
+import 'package:attendance/models/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +36,7 @@ class _InitialScreenState extends State<InitialScreen> {
       );
 
       var data = await nethelp.getData();
-
+      // print(data);
       // if (data != " Network Error") {
       if (!mounted) return;
       await Provider.of<TimeTable>(context, listen: false).setSchedule(data);
@@ -42,7 +45,7 @@ class _InitialScreenState extends State<InitialScreen> {
       Navigator.popAndPushNamed(context, Home.id);
     } else {
       if (!mounted) return;
-      Navigator.popAndPushNamed(context, IntroScreen.id);
+      Navigator.popAndPushNamed(context, LoginScreen.id);
     }
   }
 
@@ -59,6 +62,7 @@ class _InitialScreenState extends State<InitialScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Center(
         child: SpinKitFadingCircle(
           color: Colors.grey.shade700,

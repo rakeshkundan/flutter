@@ -4,11 +4,14 @@ import 'package:attendance/Data/profile_data.dart';
 import 'package:attendance/Data/state_data.dart';
 import 'package:attendance/Data/student_detail.dart';
 import 'package:attendance/Data/time_table.dart';
-import 'package:attendance/Screen/attendance_download_screen.dart';
-import 'package:attendance/Screen/attendance_screen.dart';
+import 'package:attendance/Screen/Auth/change_password.dart';
+import 'package:attendance/Screen/SupportScreen/analysis_detail_finder.dart';
+import 'package:attendance/Screen/SupportScreen/analysis_screen.dart';
+import 'package:attendance/Screen/SupportScreen/attendance_download_screen.dart';
+import 'package:attendance/Screen/SupportScreen/attendance_screen.dart';
 import 'package:attendance/Screen/initial_screen.dart';
-import 'package:attendance/Screen/intro_screen.dart';
-import 'package:attendance/Screen/profile_detail_screen.dart';
+import 'package:attendance/Screen/Auth/login_screen.dart';
+import 'package:attendance/Screen/SupportScreen/profile_detail_screen.dart';
 import 'package:attendance/Screen/TabScreen/profile_screen.dart';
 import 'package:attendance/Screen/TabScreen/schedule_screen.dart';
 import 'package:attendance/Screen/TabScreen/dashboard_screen.dart';
@@ -48,11 +51,15 @@ class MyApp extends StatelessWidget {
         routes: {
           Home.id: (context) => const Home(),
           InitialScreen.id: (context) => InitialScreen(),
-          IntroScreen.id: (context) => IntroScreen(),
+          LoginScreen.id: (context) => LoginScreen(),
+          ChangePassword.id: (context) => ChangePassword(),
           ScheduleScreen.id: (context) => ScheduleScreen(),
           ProfileScreen.id: (context) => ProfileScreen(),
           LoadingScreen.id: (context) => const LoadingScreen(),
           DashboardScreen.id: (context) => DashboardScreen(),
+          AnalysisDetailFinderScreen.id: (context) =>
+              AnalysisDetailFinderScreen(),
+          AnalysisScreen.id: (context) => AnalysisScreen(),
           AttendanceDownloadScreen.id: (context) => AttendanceDownloadScreen(),
           AttendanceScreen.id: (context) => AttendanceScreen(),
           ProfileDetailScreen.id: (context) => ProfileDetailScreen(),

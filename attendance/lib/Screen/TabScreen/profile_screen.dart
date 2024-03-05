@@ -1,11 +1,12 @@
 // ignore_for_file: unused_import, unused_local_variable
 
+import 'package:attendance/Screen/Auth/change_password.dart';
 import 'package:attendance/Screen/initial_screen.dart';
 import 'package:attendance/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance/Data/profile_data.dart';
 import 'package:attendance/models/database.dart';
-import 'package:attendance/screen/profile_detail_screen.dart';
+import 'package:attendance/Screen/SupportScreen/profile_detail_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,11 +74,6 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               children: [
                 RowItem(
-                  icon: Icons.electric_bolt_outlined,
-                  text: 'What\'s new',
-                  onPress: () {},
-                ),
-                RowItem(
                   icon: Icons.history_sharp,
                   text: 'History',
                   onPress: () {},
@@ -88,105 +84,106 @@ class ProfileScreen extends StatelessWidget {
                   onPress: () {},
                 ),
                 RowItem(
+                  icon: Icons.key,
+                  text: 'Change Password',
+                  onPress: () {
+                    Navigator.pushNamed(context, ChangePassword.id);
+                  },
+                ),
+                RowItem(
                   icon: Icons.logout,
                   text: 'Logout',
                   onPress: () {
                     showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Confirm!'),
-                            content:
-                                const Text('Are you sure wants to logout?'),
-                            actions: [
-                              RawMaterialButton(
-                                highlightColor: Colors.transparent,
-                                splashColor: Colors.transparent,
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    // color: kInactiveTextColor,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0, vertical: 7.0),
-                                  child: Text(
-                                    'Cancel',
-                                    style: kAlertButtonTextStyle,
-                                  ),
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Confirm!'),
+                          content: const Text('Are you sure wants to logout?'),
+                          actions: [
+                            RawMaterialButton(
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  // color: kInactiveTextColor,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0, vertical: 7.0),
+                                child: Text(
+                                  'Cancel',
+                                  style: kAlertButtonTextStyle,
                                 ),
                               ),
-                              RawMaterialButton(
-                                highlightColor: Colors.transparent,
-                                splashColor: Colors.transparent,
-                                onPressed: () async {
-                                  DatabaseHelper dbHelp =
-                                      DatabaseHelper.instance;
-                                  bool flag = await dbHelp.deleteDb();
-                                  // http.Response response = await http.get(
-                                  //   Uri.parse(
-                                  //     "http://localhost:3000/logout",
-                                  //   ),
-                                  // );
-                                  SharedPreferences prefs =
-                                      await SharedPreferences.getInstance();
-                                  // if (response.statusCode == 200) {
-                                  await prefs.setBool('isLoggedIn', false);
-                                  if (!context.mounted) return;
-                                  Navigator.popUntil(context, (route) => false);
-                                  Navigator.pushNamed(
-                                      context, InitialScreen.id);
-                                  // if (!context.mounted) return;
-                                  // Provider.of<Session>(context, listen: false)
-                                  //     .updateCookie(response);
-                                  // }
+                            ),
+                            RawMaterialButton(
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              onPressed: () async {
+                                DatabaseHelper dbHelp = DatabaseHelper.instance;
+                                bool flag = await dbHelp.deleteDb();
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                // if (response.statusCode == 200) {
+                                await prefs.setBool('isLoggedIn', false);
+                                await prefs.setString('authorization', "");
+                                if (!context.mounted) return;
+                                Navigator.popUntil(context, (route) => false);
+                                Navigator.pushNamed(context, InitialScreen.id);
+                                // if (!context.mounted) return;
+                                // Provider.of<Session>(context, listen: false)
+                                //     .updateCookie(response);
+                                // }
 
-                                  // if (flag) {
-                                  //   if (!context.mounted) return;
-                                  //   Provider.of<ProfileData>(context,
-                                  //           listen: false)
-                                  //       .setIsProfileSet(false);
-                                  //   Navigator.pop(context);
-                                  // } else {
-                                  //   if (!context.mounted) return;
-                                  //   Navigator.pop(context);
-                                  //   showDialog(
-                                  //       context: context,
-                                  //       builder: (context) {
-                                  //         return AlertDialog(
-                                  //           title: const Text('Error!!'),
-                                  //           content: const Text(
-                                  //               'Some Unexpected Error.Please restart the app.'),
-                                  //           actions: [
-                                  //             RawMaterialButton(
-                                  //               onPressed: () {
-                                  //                 Navigator.pop(context);
-                                  //               },
-                                  //               child: Text('ok'),
-                                  //             ),
-                                  //           ],
-                                  //         );
-                                  //       });
-                                  // }
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    // color: kInactiveTextColor,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0, vertical: 7.0),
-                                  child: Text(
-                                    'Ok',
-                                    style: kAlertButtonTextStyle,
-                                  ),
+                                // if (flag) {
+                                //   if (!context.mounted) return;
+                                //   Provider.of<ProfileData>(context,
+                                //           listen: false)
+                                //       .setIsProfileSet(false);
+                                //   Navigator.pop(context);
+                                // } else {
+                                //   if (!context.mounted) return;
+                                //   Navigator.pop(context);
+                                //   showDialog(
+                                //       context: context,
+                                //       builder: (context) {
+                                //         return AlertDialog(
+                                //           title: const Text('Error!!'),
+                                //           content: const Text(
+                                //               'Some Unexpected Error.Please restart the app.'),
+                                //           actions: [
+                                //             RawMaterialButton(
+                                //               onPressed: () {
+                                //                 Navigator.pop(context);
+                                //               },
+                                //               child: Text('ok'),
+                                //             ),
+                                //           ],
+                                //         );
+                                //       });
+                                // }
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  // color: kInactiveTextColor,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0, vertical: 7.0),
+                                child: Text(
+                                  'Ok',
+                                  style: kAlertButtonTextStyle,
                                 ),
                               ),
-                            ],
-                          );
-                        });
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                 )
               ],

@@ -4,7 +4,7 @@ import 'package:attendance/Data/profile_data.dart';
 import 'package:attendance/Data/state_data.dart';
 import 'package:attendance/Data/student_detail.dart';
 import 'package:attendance/Data/time_table.dart';
-import 'package:attendance/Screen/attendance_screen.dart';
+import 'package:attendance/Screen/SupportScreen/attendance_screen.dart';
 import 'package:attendance/Screen/home.dart';
 import 'package:attendance/Screen/initial_screen.dart';
 import 'package:attendance/Utilities/networking.dart';
@@ -36,6 +36,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           data: item,
           onTap: () async {
             Provider.of<TimeTable>(context, listen: false).setProgressBar(true);
+            String? subjectId = item['subject']['_id'];
             NetworkHelper nethelp = NetworkHelper(
               url:
                   '$kBaseLink/api/class/getClassList?sec=${item['branch']}${item['section']}',
@@ -60,7 +61,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   'data': {
                     "subjectCode": item['subject']['subjectCode'],
                     'section': item['section'],
-                    "branch": item['branch']
+                    "branch": item['branch'],
+                    "subjectId": subjectId
                   }
                 },
               );
@@ -300,7 +302,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                               )
                             ]
                           : rowBuilder(
-                              Provider.of<TimeTable>(context).scheduleData),
+                              Provider.of<TimeTable>(context).scheduleData,
+                            ),
                     ),
                   ),
                   // child: FutureBuilder(
