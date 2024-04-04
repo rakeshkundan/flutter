@@ -1,5 +1,3 @@
-// ignore_for_file: unused_local_variable, avoid_print
-
 import 'package:flutter/foundation.dart';
 import 'package:attendance/models/database.dart';
 import 'package:attendance/models/user.dart';
@@ -28,13 +26,12 @@ class ProfileData extends ChangeNotifier {
   }
 
   void updateData(String key, String value) async {
-    DatabaseHelper dbHelp = DatabaseHelper.instance;
     Map<String, String> mp = {
       ...profile,
       key: value,
     };
+    // ignore: unused_local_variable
     User user = User(mp['Name']!, mp['Department']!, mp['EmployeeId']!);
-    final rowsAffected = await dbHelp.updateUser(user);
     await setData();
   }
 

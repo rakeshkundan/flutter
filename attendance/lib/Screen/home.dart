@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:attendance/Screen/TabScreen/profile_screen.dart';
 import 'package:attendance/Screen/TabScreen/schedule_screen.dart';
 import 'package:attendance/Screen/TabScreen/dashboard_screen.dart';
@@ -14,7 +12,7 @@ class Home extends StatelessWidget {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        bottomNavigationBar: TabBar(
+        bottomNavigationBar: const TabBar(
           indicator: BoxDecoration(
             border: Border(
               top: BorderSide(
@@ -55,8 +53,8 @@ class Home extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            ScheduleScreen(),
-            DashboardScreen(),
+            const ScheduleScreen(),
+            const DashboardScreen(),
             ProfileScreen(),
           ],
         ),

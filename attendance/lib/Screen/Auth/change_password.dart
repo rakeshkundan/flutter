@@ -50,7 +50,7 @@ class ChangePassword extends StatelessWidget {
                 onPressed: () async {
                   if (oldPassController.text == "" ||
                       newPassController.text == "" ||
-                      confirmPassController == "") {
+                      confirmPassController.text == "") {
                     showDialog(
                       context: context,
                       builder: (context) {

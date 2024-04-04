@@ -39,10 +39,14 @@ class LoginScreen extends StatelessWidget {
               SizedBox(
                 height: 50,
               ),
-              CircleAvatar(
-                backgroundColor: Colors.transparent,
-                radius: 80,
-                child: Image.asset('./assets/images/manit_logo.jpg'),
+              Hero(
+                tag: "ManitLogo",
+                transitionOnUserGestures: true,
+                child: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  radius: 80,
+                  child: Image.asset('./assets/images/manit_logo.jpg'),
+                ),
               ),
               SizedBox(
                 height: 30,
@@ -136,9 +140,6 @@ class LoginScreen extends StatelessWidget {
                   }
                   Provider.of<TimeTable>(context, listen: false)
                       .setProgressBar(true);
-                  // print(textControl.text);
-                  // var validate = localCaptcha.validate(textControl.text);
-                  // if (validate == LocalCaptchaValidation.valid) {
                   try {
                     var response = await http.post(
                       Uri.parse('$kBaseLink/api/user/signIn'),
@@ -152,16 +153,15 @@ class LoginScreen extends StatelessWidget {
                       }),
                       encoding: Encoding.getByName('utf-8'),
                     );
-
+                    // print(response.body);
                     var data =
                         response != null ? jsonDecode(response.body) : {};
-                    // print(data);
-                    final SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    await prefs.setString(
-                        'authorization', data['authorization']);
 
                     if (response.statusCode == 200) {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setString(
+                          'authorization', data['authorization']);
                       Map<String, dynamic> row = {
                         DatabaseHelper.employeeId: empController.text,
                         DatabaseHelper.department: data['department'],
@@ -175,34 +175,95 @@ class LoginScreen extends StatelessWidget {
                       await Provider.of<ProfileData>(context, listen: false)
                           .setIsProfileSet(true);
                       if (!context.mounted) return;
-                      // SharedPreferences prefs =
-                      //     await SharedPreferences.getInstance();
                       await prefs.setBool('isLoggedIn', true);
+
+                      if (!context.mounted) return;
+                      Navigator.popAndPushNamed(context, Home.id);
+                      Provider.of<TimeTable>(context, listen: false)
+                          .setProgressBar(false);
+                    } else {
+                      if (!context.mounted) return;
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Alert!'),
+                            content:
+                                const Text('Employee id or Password is Wrong.'),
+                            actions: [
+                              RawMaterialButton(
+                                highlightColor: Colors.transparent,
+                                splashColor: Colors.transparent,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    // color: kInactiveTextColor,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0, vertical: 7.0),
+                                  child: Text(
+                                    'Ok',
+                                    style: kAlertButtonTextStyle,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      Provider.of<TimeTable>(context, listen: false)
+                          .setProgressBar(false);
                     }
 
-                    if (!context.mounted) return;
-                    NetworkHelper nethelp = NetworkHelper(
-                      url:
-                          "$kScheduleLink?day=${Provider.of<StateData>(context, listen: false).selectedDay.weekday}",
-                      head: true,
-                    );
+                    // if (!context.mounted) return;
+                    // NetworkHelper nethelp = NetworkHelper(
+                    //   url:
+                    //       "$kScheduleLink?day=${Provider.of<StateData>(context, listen: false).selectedDay.weekday}",
+                    //   head: true,
+                    // );
 
                     // print(await nethelp.getData());
-                    await Provider.of<TimeTable>(context, listen: false)
-                        .setSchedule(await nethelp.getData());
-
-                    if (!context.mounted) return;
-                    Navigator.popAndPushNamed(context, Home.id);
-                    Provider.of<TimeTable>(context, listen: false)
-                        .setProgressBar(false);
+                    // await Provider.of<TimeTable>(context, listen: false)
+                    //     .setSchedule(await nethelp.getData());
                   } catch (e) {
                     Provider.of<TimeTable>(context, listen: false)
                         .setProgressBar(false);
+                    if (!context.mounted) return;
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Alert!'),
+                          content: const Text('Network Error!!'),
+                          actions: [
+                            RawMaterialButton(
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  // color: kInactiveTextColor,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0, vertical: 7.0),
+                                child: Text(
+                                  'Ok',
+                                  style: kAlertButtonTextStyle,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                     print(e);
                   }
-                  // } else {
-                  //   //
-                  // }
                 },
                 child: Container(
                   decoration: BoxDecoration(

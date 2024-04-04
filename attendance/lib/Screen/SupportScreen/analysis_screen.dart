@@ -1,5 +1,6 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
+// ignore_for_file: must_be_immutable
 
+import 'package:attendance/Screen/SupportScreen/attendance_percentage_list.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -13,10 +14,12 @@ class AnalysisScreen extends StatefulWidget {
 
 class _AnalysisScreenState extends State<AnalysisScreen> {
   int? totalCount;
+  dynamic arguments;
   List<dynamic> total = [];
   List<dynamic> above75 = [];
   List<dynamic> above60below75 = [];
   List<dynamic> below60 = [];
+  List<dynamic> special = [];
   int totalStudent = 1,
       above75Student = 1,
       above60below75Student = 1,
@@ -51,10 +54,18 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
   }
 
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      arguments = (ModalRoute.of(context)?.settings.arguments ??
+          <String, dynamic>{}) as Map;
+      calculateAttendance(arguments);
+    });
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final arguments = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
-    calculateAttendance(arguments);
     // print(arguments);
     return Scaffold(
       appBar: AppBar(),
@@ -63,27 +74,27 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TextWidget(
+              const TextWidget(
                 text: "Batch 25",
               ),
-              TextWidget(
+              const TextWidget(
                 text: "CSE",
               ),
-              TextWidget(
+              const TextWidget(
                 text: "Section 1",
               ),
               SfCircularChart(
                 onSelectionChanged: (e) {
-                  print(e);
+                  // print(e);
                 },
-                palette: [
+                palette: const [
                   Colors.green,
                   Colors.yellow,
                   Colors.red,
                   Colors.lightGreen
                 ],
-                title: ChartTitle(text: 'Class Analysis'),
-                legend: Legend(
+                title: const ChartTitle(text: 'Class Analysis'),
+                legend: const Legend(
                   padding: 0,
                   isVisible: true,
                 ),
@@ -102,7 +113,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                     ],
                     xValueMapper: (ChartData data, _) => data.x,
                     yValueMapper: (ChartData data, _) => data.y,
-                    dataLabelSettings: DataLabelSettings(isVisible: true),
+                    dataLabelSettings: const DataLabelSettings(isVisible: true),
                     radius: '85%',
                   )
                 ],
@@ -110,29 +121,34 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
               BottomText(
                 title: "Total Students:",
                 count: totalStudent,
+                list: total,
               ),
               BottomText(
                 title: "Above 75%:",
                 count: above75Student,
                 color: Colors.green,
                 textColor: Colors.white,
+                list: above75,
               ),
               BottomText(
                 title: "Above 60% and below 75%:",
                 count: above60below75Student,
                 color: Colors.yellow,
+                list: above60below75,
               ),
               BottomText(
                 title: "Below 60%:",
                 count: below60Student,
                 color: Colors.red,
                 textColor: Colors.white,
+                list: below60,
               ),
               BottomText(
                 title: "Special Case:",
                 count: 00,
                 color: Colors.green,
                 textColor: Colors.white,
+                list: special,
               ),
             ],
           ),
@@ -147,32 +163,40 @@ class BottomText extends StatelessWidget {
   final int count;
   final Color color;
   final Color textColor;
+  final List<dynamic> list;
   const BottomText({
     super.key,
     this.title = "Title",
     this.count = 0,
     this.color = Colors.transparent,
     this.textColor = Colors.black,
+    required this.list,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          "   $title",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-        ),
-        Text(
-          "$count",
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            backgroundColor: color,
-            color: textColor,
+    return RawMaterialButton(
+      onPressed: () {
+        Navigator.pushNamed(context, AttendancePercentageList.id,
+            arguments: {"data": list, "title": title});
+      },
+      child: Row(
+        children: [
+          Text(
+            "   $title",
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
-        ),
-      ],
+          Text(
+            "$count",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              backgroundColor: color,
+              color: textColor,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -186,7 +210,7 @@ class TextWidget extends StatelessWidget {
     return Text(
       text,
       textAlign: TextAlign.center,
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.w600,
       ),

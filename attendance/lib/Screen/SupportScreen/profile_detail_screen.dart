@@ -1,10 +1,6 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_import
-
 import 'package:attendance/Data/profile_data.dart';
-import 'package:attendance/Data/state_data.dart';
 import 'package:attendance/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,16 +20,20 @@ class ProfileDetailScreen extends StatelessWidget {
       body: SafeArea(
         // top: false,
         child: SingleChildScrollView(
-          padding: EdgeInsets.only(left: 10.0),
+          padding: const EdgeInsets.only(left: 10.0),
           child: Column(
             // crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              CircleAvatar(
-                radius: 70,
-                backgroundColor: Colors.transparent,
-                child: Image.asset('assets/images/manit_logo.jpg'),
+              Hero(
+                tag: "ProfilePic",
+                transitionOnUserGestures: true,
+                child: CircleAvatar(
+                  radius: 70,
+                  backgroundColor: Colors.transparent,
+                  child: Image.asset('assets/images/manit_logo.jpg'),
+                ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               InputRow(
@@ -92,7 +92,7 @@ class InputRow extends StatelessWidget {
           icon,
           size: 35,
         ),
-        SizedBox(
+        const SizedBox(
           width: 20.0,
         ),
         Expanded(
@@ -101,7 +101,7 @@ class InputRow extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.w700,
                     color: kInactiveTextColor),
@@ -120,19 +120,19 @@ class InputRow extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10.0,
               ),
               Padding(
-                padding: EdgeInsets.only(right: 10.0),
+                padding: const EdgeInsets.only(right: 10.0),
                 child: Text(
                   helpText,
-                  style: TextStyle(color: kInactiveTextColor),
+                  style: const TextStyle(color: kInactiveTextColor),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              divider ? Divider() : SizedBox(),
+              divider ? const Divider() : const SizedBox(),
             ],
           ),
         ),

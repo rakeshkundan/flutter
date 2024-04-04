@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:attendance/Utilities/global_functions.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart'; //it converts different formats
@@ -24,16 +25,22 @@ class NetworkHelper {
           : await http.get(
               Uri.parse(url),
             );
+      // print(response.statusCode);
       if (response.statusCode == 200) {
         String data = response.body;
         // print(jsonDecode(data));
         return jsonDecode(data);
+      } else if (response.statusCode == 403) {
+        GlobalFunction gf = GlobalFunction();
+        await gf.logOut();
+        return "unauthorized";
       } else {
         print(jsonDecode(response.body));
         return "Network Error";
       }
     } catch (e) {
       print(e);
+      // print("hello");
       return 'Network Error';
     }
   }
@@ -60,12 +67,17 @@ class NetworkHelper {
         String data = response.body;
         // print(jsonDecode(data));
         return jsonDecode(data);
+      } else if (response.statusCode == 403) {
+        GlobalFunction gf = GlobalFunction();
+        await gf.logOut();
+        return "unauthorized";
       } else {
         print(jsonDecode(response.body));
         return "Network Error";
       }
     } catch (e) {
       print(e);
+      // print("hello");
       return 'Network Error';
     }
   }

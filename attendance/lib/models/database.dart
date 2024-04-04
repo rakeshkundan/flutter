@@ -1,18 +1,17 @@
-// ignore_for_file: prefer_const_declarations, unused_field, avoid_print, unused_import
+import 'dart:io';
 
-import 'package:attendance/models/contact.dart';
 import 'package:attendance/models/user.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
-  static final _databaseName = 'Attendance.db';
-  static final _databaseVersion = 1;
-  static final userTable = 'User';
-  static final name = 'name';
-  static final department = 'department';
-  static final employeeId = 'employeeId';
-  static final email = 'email';
+  static const _databaseName = 'Attendance.db';
+  static const _databaseVersion = 1;
+  static const userTable = 'User';
+  static const name = 'name';
+  static const department = 'department';
+  static const employeeId = 'employeeId';
+  static const email = 'email';
   // static final contactTable = 'Contacts';
   // static final contactName = 'cname';
   // static final contactNumber = 'cnum';
@@ -32,7 +31,13 @@ class DatabaseHelper {
   }
 
   _initDatabase() async {
-    String path = join(await getDatabasesPath(), _databaseName);
+    final directory = await getDatabasesPath();
+    final dirPath = '$directory/.databases';
+    bool exists = await Directory(dirPath).exists();
+    if (!exists) {
+      await Directory(dirPath).create();
+    }
+    String path = join(dirPath, _databaseName);
     return await openDatabase(path,
         version: _databaseVersion, onCreate: _onCreate);
   }
@@ -112,19 +117,24 @@ class DatabaseHelper {
     bool databaseDeleted = false;
 
     try {
-      String path = join(await getDatabasesPath(), _databaseName);
+      final directory = await getDatabasesPath();
+      final dirPath = '$directory/.databases';
+      bool exists = await Directory(dirPath).exists();
+      if (!exists) {
+        await Directory(dirPath).create();
+      }
+      String path = join(dirPath, _databaseName);
       await deleteDatabase(path).whenComplete(() {
         databaseDeleted = true;
         _database = null;
       }).catchError((onError) {
         databaseDeleted = false;
       });
-    } on DatabaseException catch (error) {
-      print(error);
+    } on DatabaseException {
+      // print(error);
     } catch (error) {
-      print(error);
+      // print(error);
     }
-
     return databaseDeleted;
   }
 }

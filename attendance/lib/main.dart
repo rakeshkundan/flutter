@@ -8,7 +8,9 @@ import 'package:attendance/Screen/Auth/change_password.dart';
 import 'package:attendance/Screen/SupportScreen/analysis_detail_finder.dart';
 import 'package:attendance/Screen/SupportScreen/analysis_screen.dart';
 import 'package:attendance/Screen/SupportScreen/attendance_download_screen.dart';
+import 'package:attendance/Screen/SupportScreen/attendance_percentage_list.dart';
 import 'package:attendance/Screen/SupportScreen/attendance_screen.dart';
+import 'package:attendance/Screen/SupportScreen/setting.dart';
 import 'package:attendance/Screen/initial_screen.dart';
 import 'package:attendance/Screen/Auth/login_screen.dart';
 import 'package:attendance/Screen/SupportScreen/profile_detail_screen.dart';
@@ -17,6 +19,7 @@ import 'package:attendance/Screen/TabScreen/schedule_screen.dart';
 import 'package:attendance/Screen/TabScreen/dashboard_screen.dart';
 import 'package:attendance/Screen/home.dart';
 import 'package:attendance/Screen/loading_screen.dart';
+import 'package:attendance/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +49,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        theme: ThemeData.light().copyWith(),
+        theme: ThemeData.light().copyWith(primaryColor: kInactiveTextColor),
         initialRoute: InitialScreen.id,
         routes: {
           Home.id: (context) => const Home(),
@@ -60,9 +63,11 @@ class MyApp extends StatelessWidget {
           AnalysisDetailFinderScreen.id: (context) =>
               AnalysisDetailFinderScreen(),
           AnalysisScreen.id: (context) => AnalysisScreen(),
+          AttendancePercentageList.id: (context) => AttendancePercentageList(),
           AttendanceDownloadScreen.id: (context) => AttendanceDownloadScreen(),
           AttendanceScreen.id: (context) => AttendanceScreen(),
           ProfileDetailScreen.id: (context) => ProfileDetailScreen(),
+          Setting.id: (context) => Setting(),
         },
       ),
     );

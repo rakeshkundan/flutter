@@ -1,17 +1,16 @@
-// ignore_for_file: unused_import, unused_local_variable
+// ignore_for_file: must_be_immutable
 
-import 'package:attendance/Screen/Auth/change_password.dart';
+// import 'package:attendance/Screen/Auth/change_password.dart';
+import 'package:attendance/Screen/SupportScreen/setting.dart';
 import 'package:attendance/Screen/initial_screen.dart';
+import 'package:attendance/Utilities/global_functions.dart';
 import 'package:attendance/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance/Data/profile_data.dart';
 import 'package:attendance/models/database.dart';
 import 'package:attendance/Screen/SupportScreen/profile_detail_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
-// ignore: must_be_immutable
 class ProfileScreen extends StatelessWidget {
   static String id = 'profile_screen';
   ProfileScreen({super.key});
@@ -33,10 +32,14 @@ class ProfileScreen extends StatelessWidget {
             onTap: () {
               Navigator.pushNamed(context, ProfileDetailScreen.id);
             },
-            child: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              radius: 70,
-              child: Image.asset('assets/images/manit_logo.jpg'),
+            child: Hero(
+              tag: "ProfilePic",
+              transitionOnUserGestures: true,
+              child: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                radius: 70,
+                child: Image.asset('assets/images/manit_logo.jpg'),
+              ),
             ),
           ),
           const SizedBox(
@@ -81,13 +84,8 @@ class ProfileScreen extends StatelessWidget {
                 RowItem(
                   icon: Icons.settings_outlined,
                   text: 'Settings',
-                  onPress: () {},
-                ),
-                RowItem(
-                  icon: Icons.key,
-                  text: 'Change Password',
                   onPress: () {
-                    Navigator.pushNamed(context, ChangePassword.id);
+                    Navigator.pushNamed(context, Setting.id);
                   },
                 ),
                 RowItem(
@@ -124,49 +122,56 @@ class ProfileScreen extends StatelessWidget {
                               highlightColor: Colors.transparent,
                               splashColor: Colors.transparent,
                               onPressed: () async {
-                                DatabaseHelper dbHelp = DatabaseHelper.instance;
-                                bool flag = await dbHelp.deleteDb();
-                                SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
-                                // if (response.statusCode == 200) {
-                                await prefs.setBool('isLoggedIn', false);
-                                await prefs.setString('authorization', "");
+                                GlobalFunction gf = GlobalFunction();
+                                await gf.logOut();
                                 if (!context.mounted) return;
                                 Navigator.popUntil(context, (route) => false);
                                 Navigator.pushNamed(context, InitialScreen.id);
-                                // if (!context.mounted) return;
-                                // Provider.of<Session>(context, listen: false)
-                                //     .updateCookie(response);
-                                // }
-
-                                // if (flag) {
-                                //   if (!context.mounted) return;
-                                //   Provider.of<ProfileData>(context,
-                                //           listen: false)
-                                //       .setIsProfileSet(false);
-                                //   Navigator.pop(context);
-                                // } else {
-                                //   if (!context.mounted) return;
-                                //   Navigator.pop(context);
-                                //   showDialog(
-                                //       context: context,
-                                //       builder: (context) {
-                                //         return AlertDialog(
-                                //           title: const Text('Error!!'),
-                                //           content: const Text(
-                                //               'Some Unexpected Error.Please restart the app.'),
-                                //           actions: [
-                                //             RawMaterialButton(
-                                //               onPressed: () {
-                                //                 Navigator.pop(context);
-                                //               },
-                                //               child: Text('ok'),
-                                //             ),
-                                //           ],
-                                //         );
-                                //       });
-                                // }
                               },
+                              // {
+                              //   DatabaseHelper dbHelp = DatabaseHelper.instance;
+                              //   bool flag = await dbHelp.deleteDb();
+                              //   SharedPreferences prefs =
+                              //       await SharedPreferences.getInstance();
+                              //   // if (response.statusCode == 200) {
+                              //   await prefs.setBool('isLoggedIn', false);
+                              //   await prefs.setString('authorization', "");
+                              //   if (!context.mounted) return;
+                              //   Navigator.popUntil(context, (route) => false);
+                              //   Navigator.pushNamed(context, InitialScreen.id);
+                              //   // if (!context.mounted) return;
+                              //   // Provider.of<Session>(context, listen: false)
+                              //   //     .updateCookie(response);
+                              //   // }
+                              //
+                              //   // if (flag) {
+                              //   //   if (!context.mounted) return;
+                              //   //   Provider.of<ProfileData>(context,
+                              //   //           listen: false)
+                              //   //       .setIsProfileSet(false);
+                              //   //   Navigator.pop(context);
+                              //   // } else {
+                              //   //   if (!context.mounted) return;
+                              //   //   Navigator.pop(context);
+                              //   //   showDialog(
+                              //   //       context: context,
+                              //   //       builder: (context) {
+                              //   //         return AlertDialog(
+                              //   //           title: const Text('Error!!'),
+                              //   //           content: const Text(
+                              //   //               'Some Unexpected Error.Please restart the app.'),
+                              //   //           actions: [
+                              //   //             RawMaterialButton(
+                              //   //               onPressed: () {
+                              //   //                 Navigator.pop(context);
+                              //   //               },
+                              //   //               child: Text('ok'),
+                              //   //             ),
+                              //   //           ],
+                              //   //         );
+                              //   //       });
+                              //   // }
+                              // },
                               child: Container(
                                 decoration: BoxDecoration(
                                   // color: kInactiveTextColor,

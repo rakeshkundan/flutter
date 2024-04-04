@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, unused_local_variable
 
+// import 'dart:html';
 import 'dart:io';
 import 'package:attendance/constants.dart';
 import 'package:flowder/flowder.dart';
@@ -19,12 +20,10 @@ class FileStorage {
       directory = Directory("/storage/emulated/0/Download");
     } else {
       directory = await getApplicationDocumentsDirectory();
-      // directory = await getDownloadsDirectory() ??
-      //     await getApplicationDocumentsDirectory();
     }
 
     final exPath = directory.path;
-    print("Saved Path: $exPath");
+    // print("Saved Path: $exPath");
     await Directory(exPath).create(recursive: true);
     return exPath;
   }
@@ -34,29 +33,45 @@ class FileStorage {
     return directory;
   }
 
-  static Future<void> writeCounter(data) async {
+  static Future<void> writeCounter({
+    data,
+    required void Function(dynamic, dynamic) progressIndicator,
+    required VoidCallback onDone,
+  }) async {
+    // print(data);
     final path = await _localPath;
+    int i = 1;
+    String dirPath =
+        '$path/${data['branch']}_${data['section']}_${data['session']}.xlsx';
+    // print();
+    // print(dirPath);
+    while (await File(dirPath).exists()) {
+      dirPath =
+          '$path/${data['branch']}_${data['section']}_${data['session']}($i).xlsx';
+      i++;
+      // print(dirPath);
+    }
+
     final downloaderUtils = DownloaderUtils(
-      progressCallback: (current, total) {
-        final progress = (current / total) * 100;
-        print('Downloading: $progress');
-      },
-      file: File(
-          '$path/${data['branch']}_${data['section']}_${data['session']}.xlsx'),
+      progressCallback: progressIndicator,
+      file: File(dirPath
+          // '$path/${data['branch']}_${data['section']}_${data['session']}.xlsx',
+          ),
       progress: ProgressImplementation(),
-      onDone: () {
-        // OpenFile.open("$path/Cse01.xlsx");
-        print('Download done');
-        // OpenFile.open("$localpath/Cse01.xlsx");
-      },
+      onDone: onDone,
       deleteOnCancel: true,
     );
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     var auth = prefs.getString('authorization');
+    var newAuth = Uri.encodeFull(auth!);
+    // print(Uri.encodeFull(
+    //     '$kBaseLink/api/attendance/downloadAttendance/?subjectId=${data['subject']}&session=${data['session']}&branch=${data['branch']}&section=${data['section']}&authorization=$auth'));
 
     final core = await Flowder.download(
-        '$kBaseLink/api/attendance/downloadAttenance/?subjectId=${data['subject']}&session=${data['session']}&branch=${data['branch']}&section=${data['section']}&authorization=$auth',
+        Uri.encodeFull(
+            '$kBaseLink/api/attendance/downloadAttendance/?subjectId=${data['subject']}&session=${data['session']}&branch=${data['branch']}&section=${data['section']}&authorization=$newAuth'),
         downloaderUtils);
   }
 }

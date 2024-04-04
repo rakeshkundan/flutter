@@ -1,13 +1,10 @@
-// ignore_for_file: unused_import
-
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:local_captcha/local_captcha.dart';
 
 class StateData extends ChangeNotifier {
   ///////Attendance Count/////
-  int? classCount;
-  void setClassCount(int? count) {
+  int? classCount = 1;
+  void setClassCount(int count) {
     classCount = count;
     notifyListeners();
   }

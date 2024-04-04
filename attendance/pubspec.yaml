@@ -48,7 +48,10 @@ dependencies:
   flowder: ^0.2.0
   path_provider: ^2.1.2
   permission_handler: ^11.3.0
-  syncfusion_flutter_charts: ^24.2.7+1
+  syncfusion_flutter_charts: ^25.1.35
+  percent_indicator: ^4.2.3
+  shimmer: ^3.0.0
+
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class TimeTable extends ChangeNotifier {
-  dynamic scheduleData;
+  dynamic scheduleData = [];
   Future<void> setSchedule(dynamic data) async {
     // print(data['TimeTable']);
     if (data != "Network Error") {

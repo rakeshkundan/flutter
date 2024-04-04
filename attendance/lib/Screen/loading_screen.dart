@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:attendance/Data/student_detail.dart';
 import 'package:attendance/Screen/SupportScreen/attendance_screen.dart';
@@ -44,7 +44,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
           child: SpinKitFadingCircle(
         color: Colors.grey,

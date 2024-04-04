@@ -1,10 +1,11 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, avoid_print
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, avoid_print, must_be_immutable
 
 import 'dart:convert';
 
 import 'package:attendance/Data/profile_data.dart';
 import 'package:attendance/Data/state_data.dart';
 import 'package:attendance/Data/student_detail.dart';
+import 'package:attendance/components/student_card_attendance.dart';
 import 'package:attendance/constants.dart';
 import 'package:attendance/models/student.dart';
 import 'package:flutter/material.dart';
@@ -82,34 +83,47 @@ class AttendanceScreen extends StatelessWidget {
       );
     }
     data.add(AbsentStudent());
-    data.add(DropdownButton(
-      value: Provider.of<StateData>(context).getClassCount,
-      hint: Text("Attendance Count"),
-      items: [
-        DropdownMenuItem(
-          value: 0,
-          child: Text("0"),
+    data.add(Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Text(
+          "Attendance Count:",
+          style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.w500,
+              color: kInactiveTextColor),
         ),
-        DropdownMenuItem(
-          value: 1,
-          child: Text("1"),
-        ),
-        DropdownMenuItem(
-          value: 2,
-          child: Text("2"),
-        ),
-        DropdownMenuItem(
-          value: 3,
-          child: Text("3"),
-        ),
-        DropdownMenuItem(
-          value: 4,
-          child: Text("4"),
-        ),
+        DropdownButton(
+          value: Provider.of<StateData>(context).getClassCount,
+          hint: Text("Set Count"),
+          items: [
+            DropdownMenuItem(
+              value: 0,
+              child: Text("0"),
+            ),
+            DropdownMenuItem(
+              value: 1,
+              child: Text("1"),
+            ),
+            DropdownMenuItem(
+              value: 2,
+              child: Text("2"),
+            ),
+            DropdownMenuItem(
+              value: 3,
+              child: Text("3"),
+            ),
+            DropdownMenuItem(
+              value: 4,
+              child: Text("4"),
+            ),
+          ],
+          onChanged: (e) {
+            Provider.of<StateData>(context, listen: false)
+                .setClassCount(e ?? 1);
+          },
+        )
       ],
-      onChanged: (e) {
-        Provider.of<StateData>(context, listen: false).setClassCount(e);
-      },
     ));
     data.add(
       Container(
@@ -155,6 +169,7 @@ class AttendanceScreen extends StatelessWidget {
                       // var section =
                       //     Provider.of<StudentDetail>(context, listen: false)
                       //         .sectionName;
+
                       var response = await http.post(
                         url,
                         headers: {
@@ -166,7 +181,10 @@ class AttendanceScreen extends StatelessWidget {
                             "subjectId": subjectId,
                             "branch": branch,
                             "data": {
-                              "date": DateTime.now().toString(),
+                              "date":
+                                  Provider.of<StateData>(context, listen: false)
+                                      .selectedDay
+                                      .toString(),
                               "attendance": res,
                             },
                             "section": section,
@@ -179,7 +197,7 @@ class AttendanceScreen extends StatelessWidget {
                       if (response.statusCode == 200) {
                         if (!context.mounted) return;
                         Provider.of<StateData>(context, listen: false)
-                            .setClassCount(null);
+                            .setClassCount(1);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Successfully saved'),
@@ -370,61 +388,61 @@ class AbsentStudent extends StatelessWidget {
   }
 }
 
-class StudentCard extends StatelessWidget {
-  final String name;
-  final String scholarNumber;
-  final int index;
-  final String serialNumber;
-  const StudentCard({
-    super.key,
-    required this.name,
-    required this.scholarNumber,
-    this.index = 0,
-    this.serialNumber = "00",
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            '$serialNumber.',
-            style: TextStyle(fontSize: 20),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Expanded(
-            flex: 3,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  scholarNumber,
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Checkbox(
-              value: Provider.of<StudentDetail>(context).isPresent(index),
-              onChanged: (val) {
-                Provider.of<StudentDetail>(context, listen: false)
-                    .setIsPresent(index);
-              })
-        ],
-      ),
-    );
-  }
-}
+// class StudentCard extends StatelessWidget {
+//   final String name;
+//   final String scholarNumber;
+//   final int index;
+//   final String serialNumber;
+//   const StudentCard({
+//     super.key,
+//     required this.name,
+//     required this.scholarNumber,
+//     this.index = 0,
+//     this.serialNumber = "00",
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+//       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           Text(
+//             '$serialNumber.',
+//             style: TextStyle(fontSize: 20),
+//           ),
+//           SizedBox(
+//             width: 10,
+//           ),
+//           Expanded(
+//             flex: 3,
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text(
+//                   name,
+//                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//                 ),
+//                 Text(
+//                   scholarNumber,
+//                   style: TextStyle(
+//                     fontSize: 17,
+//                     fontWeight: FontWeight.w500,
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           Checkbox(
+//               value: Provider.of<StudentDetail>(context).isPresent(index),
+//               onChanged: (val) {
+//                 Provider.of<StudentDetail>(context, listen: false)
+//                     .setIsPresent(index);
+//               })
+//         ],
+//       ),
+//     );
+//   }
+// }
