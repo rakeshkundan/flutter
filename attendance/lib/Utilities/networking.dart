@@ -47,7 +47,7 @@ class NetworkHelper {
 
   Future postData(data) async {
     try {
-      print(data);
+      // print(data);
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       String? authorization = prefs.getString('authorization');
       headers['authorization'] = authorization!;

@@ -11,6 +11,7 @@ import 'package:attendance/Screen/SupportScreen/attendance_download_screen.dart'
 import 'package:attendance/Screen/SupportScreen/attendance_percentage_list.dart';
 import 'package:attendance/Screen/SupportScreen/attendance_screen.dart';
 import 'package:attendance/Screen/SupportScreen/setting.dart';
+import 'package:attendance/Screen/SupportScreen/student_summary_screen.dart';
 import 'package:attendance/Screen/initial_screen.dart';
 import 'package:attendance/Screen/Auth/login_screen.dart';
 import 'package:attendance/Screen/SupportScreen/profile_detail_screen.dart';
@@ -64,6 +65,7 @@ class MyApp extends StatelessWidget {
               AnalysisDetailFinderScreen(),
           AnalysisScreen.id: (context) => AnalysisScreen(),
           AttendancePercentageList.id: (context) => AttendancePercentageList(),
+          StudentSummaryScreen.id: (context) => StudentSummaryScreen(),
           AttendanceDownloadScreen.id: (context) => AttendanceDownloadScreen(),
           AttendanceScreen.id: (context) => AttendanceScreen(),
           ProfileDetailScreen.id: (context) => ProfileDetailScreen(),

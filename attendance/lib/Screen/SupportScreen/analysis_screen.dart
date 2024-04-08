@@ -1,12 +1,23 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, unused_local_variable
 
 import 'package:attendance/Screen/SupportScreen/attendance_percentage_list.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class AnalysisScreen extends StatefulWidget {
   static String id = "analysis_screen";
-  const AnalysisScreen({super.key});
+  final String section;
+  final String batch;
+  final String branch;
+  dynamic data;
+
+  AnalysisScreen(
+      {super.key,
+      this.branch = "CSE",
+      this.batch = "Batch 25",
+      this.section = "01",
+      this.data});
 
   @override
   State<AnalysisScreen> createState() => _AnalysisScreenState();
@@ -14,9 +25,11 @@ class AnalysisScreen extends StatefulWidget {
 
 class _AnalysisScreenState extends State<AnalysisScreen> {
   int? totalCount;
-  dynamic arguments;
+
+  late dynamic arguments;
   List<dynamic> total = [];
   List<dynamic> above75 = [];
+  List<dynamic> below75 = [];
   List<dynamic> above60below75 = [];
   List<dynamic> below60 = [];
   List<dynamic> special = [];
@@ -26,22 +39,28 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
       below60Student = 1;
 
   void calculateAttendance(data) {
+    // print(data);
+    int count = 0;
     if (data != null) {
-      totalCount = data['data']['total'];
-      // print(data['data']['cumulativeAttendance']);
-      for (var item in data['data']['cumulativeAttendance'].entries) {
-        var percent = item.value / totalCount;
+      totalCount = data['total'];
+      // print(data['cumulativeAttendance'][0].value);
+      // print(data['cumulativeAttendance']);
+      for (var item in data['cumulativeAttendance'].entries) {
+        var percent = item.value['isPresent'] / totalCount;
         total.add(item);
-        // print(item);
+        // print(percent);
 
         if (percent >= 0.75) {
           above75.add(item);
         } else if (percent < .75 && percent >= .60) {
           above60below75.add(item);
+          below75.add(item);
         } else {
+          below75.add(item);
           below60.add(item);
         }
       }
+      // print(below75.length);
       // print(total);
       setState(() {
         totalStudent = total.length;
@@ -55,11 +74,14 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      arguments = (ModalRoute.of(context)?.settings.arguments ??
-          <String, dynamic>{}) as Map;
-      calculateAttendance(arguments);
-    });
+    arguments = widget.data;
+    calculateAttendance(arguments);
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   // arguments = (ModalRoute.of(context)?.settings.arguments ??
+    //   //     <String, dynamic>{}) as Map;
+    //   calculateAttendance(arguments);
+    // });
 
     super.initState();
   }
@@ -74,49 +96,54 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const TextWidget(
-                text: "Batch 25",
+              TextWidget(
+                text: "Batch ${widget.batch}",
               ),
-              const TextWidget(
-                text: "CSE",
+              TextWidget(
+                text: widget.branch,
               ),
-              const TextWidget(
-                text: "Section 1",
+              TextWidget(
+                text: "Section ${widget.section}",
               ),
-              SfCircularChart(
-                onSelectionChanged: (e) {
-                  // print(e);
-                },
-                palette: const [
-                  Colors.green,
-                  Colors.yellow,
-                  Colors.red,
-                  Colors.lightGreen
-                ],
-                title: const ChartTitle(text: 'Class Analysis'),
-                legend: const Legend(
-                  padding: 0,
-                  isVisible: true,
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * .5,
+                child: SfCircularChart(
+                  onSelectionChanged: (e) {
+                    // print(e);
+                  },
+                  palette: const [
+                    Colors.green,
+                    Colors.yellow,
+                    Colors.red,
+                    Colors.lightGreen
+                  ],
+                  title: const ChartTitle(text: 'Class Analysis'),
+                  legend: const Legend(
+                    padding: 0,
+                    isVisible: true,
+                  ),
+                  series: <CircularSeries>[
+                    // Render pie chart
+                    PieSeries<ChartData, String>(
+                      dataSource: [
+                        // Bind data source
+                        ChartData(
+                            '%>=75:', (above75Student / totalStudent) * 100),
+                        ChartData('60<%<75:',
+                            (above60below75Student / totalStudent) * 100),
+                        ChartData(
+                            '%<=60:', (below60Student / totalStudent) * 100),
+                        ChartData('Special:', (0 / totalStudent) * 100),
+                      ],
+                      xValueMapper: (ChartData data, _) => data.x,
+                      yValueMapper: (ChartData data, _) => data.y,
+                      dataLabelSettings:
+                          const DataLabelSettings(isVisible: true),
+                      radius: '85%',
+                    )
+                  ],
                 ),
-                series: <CircularSeries>[
-                  // Render pie chart
-                  PieSeries<ChartData, String>(
-                    dataSource: [
-                      // Bind data source
-                      ChartData(
-                          '%>=75:', (above75Student / totalStudent) * 100),
-                      ChartData('60<%<75:',
-                          (above60below75Student / totalStudent) * 100),
-                      ChartData(
-                          '%<=60:', (below60Student / totalStudent) * 100),
-                      ChartData('Special:', (0 / totalStudent) * 100),
-                    ],
-                    xValueMapper: (ChartData data, _) => data.x,
-                    yValueMapper: (ChartData data, _) => data.y,
-                    dataLabelSettings: const DataLabelSettings(isVisible: true),
-                    radius: '85%',
-                  )
-                ],
               ),
               BottomText(
                 title: "Total Students:",
@@ -129,6 +156,12 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                 color: Colors.green,
                 textColor: Colors.white,
                 list: above75,
+              ),
+              BottomText(
+                title: "Below 75%:",
+                count: below75.length,
+                color: Colors.orange,
+                list: below75,
               ),
               BottomText(
                 title: "Above 60% and below 75%:",

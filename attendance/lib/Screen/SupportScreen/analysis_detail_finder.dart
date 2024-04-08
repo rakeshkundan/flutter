@@ -1,9 +1,8 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'dart:convert';
-
 import 'package:attendance/Screen/SupportScreen/analysis_screen.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:attendance/Utilities/networking.dart';
 import 'package:attendance/constants.dart';
@@ -234,11 +233,18 @@ class _AnalysisDetailFinderScreen extends State<AnalysisDetailFinderScreen> {
                               var data = jsonDecode(response.body);
                               // print(data);
                               if (!context.mounted) return;
-                              Navigator.pushNamed(
-                                context,
-                                AnalysisScreen.id,
-                                arguments: {"data": data},
-                              );
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => AnalysisScreen(
+                                        branch: branch ?? "",
+                                        section: section ?? "",
+                                        batch: session ?? "",
+                                        data: data,
+                                      )));
+                              // Navigator.pushNamed(
+                              //   context,
+                              //   AnalysisScreen.id,
+                              //   arguments: {"data": data},
+                              // );
                               setState(() {
                                 spinner = false;
                               });
