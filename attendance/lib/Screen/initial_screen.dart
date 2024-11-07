@@ -1,4 +1,5 @@
 import 'package:attendance/Data/profile_data.dart';
+import 'package:attendance/Data/time_table.dart';
 import 'package:attendance/Screen/home.dart';
 import 'package:attendance/Screen/Auth/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class InitialScreen extends StatefulWidget {
 
 class _InitialScreenState extends State<InitialScreen> {
   void firstTimeChecker() async {
+    Provider.of<TimeTable>(context, listen: false).progressBar = false;
     await Provider.of<ProfileData>(context, listen: false).setData();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? isLoggedIn = prefs.getBool('isLoggedIn');

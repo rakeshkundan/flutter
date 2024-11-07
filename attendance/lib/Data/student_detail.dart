@@ -25,8 +25,8 @@ class StudentDetail extends ChangeNotifier {
     for (int i = 0; i < detail.length; i++) {
       data.add(
         Student(
-          name: detail[i]['Name of Student'],
-          scholarNumber: detail[i]['Scholar No.'].toString(),
+          name: detail[i]['StudentName'],
+          scholarNumber: detail[i]['scholarNumber'].toString(),
         ),
       );
     }

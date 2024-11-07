@@ -76,12 +76,16 @@ class _AnalysisDetailFinderScreen extends State<AnalysisDetailFinderScreen> {
         ),
       );
     }
+    // print(data['data']['subject'][0]['_id']);
     for (var item in data['data']['subject']) {
+      // print(item);
+      var data = json.decode(item);
+      // print(data);
       subjectList.add(
         DropdownMenuItem(
-          value: item['_id'],
+          value: data['_id'],
           child: Text(
-            item['subjectName'],
+            data['subjectName'],
             overflow: TextOverflow.ellipsis,
           ),
         ),

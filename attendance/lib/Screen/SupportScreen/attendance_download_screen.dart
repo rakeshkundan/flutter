@@ -8,6 +8,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shimmer/shimmer.dart';
+import 'dart:convert';
 
 class AttendanceDownloadScreen extends StatefulWidget {
   static String id = "attendance_download_screen";
@@ -75,11 +76,12 @@ class _AttendanceDownloadScreenState extends State<AttendanceDownloadScreen> {
       );
     }
     for (var item in data['data']['subject']) {
+      var data = json.decode(item);
       subjectList.add(
         DropdownMenuItem(
-          value: item['_id'],
+          value: data['_id'],
           child: Text(
-            item['subjectName'],
+            data['subjectName'],
             overflow: TextOverflow.ellipsis,
           ),
         ),

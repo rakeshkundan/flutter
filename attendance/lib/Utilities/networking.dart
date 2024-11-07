@@ -20,6 +20,7 @@ class NetworkHelper {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       String? authorization = prefs.getString('authorization');
       headers['authorization'] = authorization!;
+      // print(headers);
       http.Response response = head
           ? await http.get(Uri.parse(url), headers: headers)
           : await http.get(
@@ -50,12 +51,14 @@ class NetworkHelper {
       // print(data);
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       String? authorization = prefs.getString('authorization');
+      var headers = {"Accept": "*/*", "Content-Type": "application/json"};
       headers['authorization'] = authorization!;
+
       http.Response response = head
           ? await http.post(
               Uri.parse(url),
               headers: headers,
-              body: data,
+              body: jsonEncode(data),
               encoding: Encoding.getByName('utf-8'),
             )
           : await http.post(

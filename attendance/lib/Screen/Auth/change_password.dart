@@ -3,7 +3,7 @@
 import 'dart:convert';
 
 import 'package:attendance/Data/time_table.dart';
-import 'package:attendance/Screen/Auth/login_screen.dart';
+import 'package:attendance/components/input_box.dart';
 import 'package:attendance/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

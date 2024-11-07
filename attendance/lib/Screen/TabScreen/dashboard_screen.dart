@@ -1,5 +1,7 @@
 import 'package:attendance/Screen/SupportScreen/analysis_detail_finder.dart';
 import 'package:attendance/Screen/SupportScreen/attendance_download_screen.dart';
+import 'package:attendance/Screen/SupportScreen/replacement_request.dart';
+import 'package:attendance/Screen/SupportScreen/timetable_modify.dart';
 import 'package:attendance/components/dashboard_card.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -41,11 +43,15 @@ class DashboardScreen extends StatelessWidget {
                 ),
                 DashboardCard(
                   icon: Icons.calendar_month_outlined,
-                  title: "Reschedule",
-                  onClick: () {},
+                  title: "Class Request",
+                  onClick: () {
+                    Navigator.pushNamed(context, ReplacementRequest.id);
+                  },
                 ),
                 DashboardCard(
-                  onClick: () {},
+                  onClick: () {
+                    Navigator.pushNamed(context, TimetableModify.id);
+                  },
                   title: "TimeTable",
                   icon: FontAwesomeIcons.calendarCheck,
                 ),

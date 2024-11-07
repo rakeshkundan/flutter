@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:attendance/Utilities/networking.dart';
 import 'package:attendance/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -105,6 +104,7 @@ class _StudentSummaryScreenState extends State<StudentSummaryScreen> {
         ),
       ),
       body: ModalProgressHUD(
+        opacity: 0.2,
         inAsyncCall: spinner,
         child: SafeArea(
           child: SingleChildScrollView(

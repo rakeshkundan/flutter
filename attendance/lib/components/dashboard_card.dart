@@ -47,6 +47,7 @@ class DashboardCard extends StatelessWidget {
                 ),
                 Text(
                   title,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: .05 * width,
                     fontWeight: FontWeight.w600,

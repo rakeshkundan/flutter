@@ -90,7 +90,13 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
   Widget build(BuildContext context) {
     // print(arguments);
     return Scaffold(
-      appBar: AppBar(),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        // backgroundColor: Colors.transparent,
+        scrolledUnderElevation: 0.0,
+      ),
+      // backgroundColor: Colors.transparent,
+
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
