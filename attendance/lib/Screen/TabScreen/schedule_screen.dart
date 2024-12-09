@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:attendance/Data/state_data.dart';
 import 'package:attendance/Data/student_detail.dart';
 import 'package:attendance/Data/time_table.dart';
@@ -54,9 +52,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   List<Widget> rowBuilder(dynamic schedule) {
     List<Widget> list = [];
-    // print(schedule);
+    //print(schedule);
     int i = 0;
-    for (var item in schedule) {
+    for (var item in schedule['TimeTable']) {
       // print(item);
       list.add(
         ScheduleCard(
@@ -111,14 +109,100 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: Text('Alert!'),
-                  content: Text('Attendance is already submitted'),
+                  title: const Text('Alert!'),
+                  content: const Text('Attendance is already submitted'),
                   actions: [
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text('Ok'),
+                      child: const Text('Ok'),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            if (!mounted) return;
+            Provider.of<TimeTable>(context, listen: false)
+                .setProgressBar(false);
+          },
+          isLongpressable: true,
+        ),
+      );
+      i++;
+    }
+    list.add(const Text(
+      "Temporary Assigned",
+      style: TextStyle(
+        fontSize: 25,
+        fontWeight: FontWeight.bold,
+        decoration: TextDecoration.underline,
+      ),
+    ));
+    for (var item in schedule['Temporary']) {
+      // print(item);
+      list.add(
+        ScheduleCard(
+          index: i,
+          data: item,
+          onTap: () async {
+            String date = Provider.of<StateData>(context, listen: false)
+                .focusedDay
+                .toString()
+                .split(' ')[0];
+            String dateTime = item['timing'] + " " + date;
+            Provider.of<TimeTable>(context, listen: false).setProgressBar(true);
+            String? subjectId = item['subject']['_id'];
+            var isElective = item['subject']['isElective'];
+            NetworkHelper nethelp = NetworkHelper(
+              url:
+                  '$kBaseLink/api/Student/getStudentList?branch=${item["branch"]}&section=${item["section"]}&batch=${item["session"]}&isElective=$isElective&subjectId=$subjectId&dateTime=$dateTime&temp=1',
+              head: true,
+            );
+            var data = await nethelp.getData();
+            // print(data['message']);
+            if (data == 'Network Error') {
+              // print('Error');
+            } else if (data is List) {
+              if (!mounted) return;
+              await Provider.of<StudentDetail>(context, listen: false).setData({
+                "subCode": item['subject']['subjectCode'],
+                "data": data,
+                "section": item['section'],
+              });
+              if (!mounted) return;
+              Provider.of<StudentDetail>(context, listen: false).subjectName =
+                  item['subject']['subjectName'];
+
+              // print(date);
+              if (!mounted) return;
+              Navigator.pushNamed(
+                context,
+                AttendanceScreen.id,
+                arguments: {
+                  'data': {
+                    "subjectCode": item['subject']['subjectCode'],
+                    'section': item['section'],
+                    "branch": item['branch'],
+                    "subjectId": subjectId,
+                    "dateTime": dateTime,
+                  }
+                },
+              );
+            } else if (data['message'] == "already Filled") {
+              if (!mounted) return;
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Alert!'),
+                  content: const Text('Attendance is already submitted'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Ok'),
                     ),
                   ],
                 ),
@@ -134,7 +218,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       i++;
     }
 
-    if (list.isEmpty) {
+    if (list.length == 1) {
       list = [
         const SizedBox(
           height: 200,
@@ -347,110 +431,110 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             ],
           ),
           Expanded(
-              flex: 7,
-              child: ModalProgressHUD(
-                inAsyncCall: Provider.of<TimeTable>(context).isProgress,
-                child: RefreshIndicator(
-                  onRefresh: () async {
-                    await Future.delayed(const Duration(seconds: 2), () {});
-                    if (!context.mounted) return;
-                    Navigator.popAndPushNamed(context, InitialScreen.id);
-                  },
-                  child: !spinner
-                      ? SizedBox(
-                          width: double.infinity,
-                          height: double.infinity,
-                          child: SingleChildScrollView(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            child: Column(
-                              children: Provider.of<TimeTable>(context)
-                                          .scheduleData ==
-                                      "Network Error"
-                                  ? [
-                                      const SizedBox(
-                                        height: 200,
-                                      ),
-                                      const Text(
-                                        'Network Error!!',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 27,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      Text(
-                                        'If Any error then Contact Admin',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.grey.shade700,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      RawMaterialButton(
-                                        onPressed: () async {
-                                          initialCall();
-                                        },
-                                        fillColor: Colors.grey.shade700,
-                                        constraints:
-                                            const BoxConstraints(minWidth: 10),
-                                        padding: const EdgeInsets.all(7),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                        ),
-                                        child: const Text(
-                                          'Refresh',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      )
-                                    ]
-                                  : rowBuilder(
-                                      Provider.of<TimeTable>(context)
-                                          .scheduleData,
-                                    ),
-                            ),
-                          ),
-                        )
-                      : SizedBox(
-                          width: double.infinity,
-                          height: double.infinity,
+            flex: 7,
+            child: ModalProgressHUD(
+              inAsyncCall: Provider.of<TimeTable>(context).isProgress,
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await Future.delayed(const Duration(seconds: 2), () {});
+                  if (!context.mounted) return;
+                  Navigator.popAndPushNamed(context, InitialScreen.id);
+                },
+                child: !spinner
+                    ? SizedBox(
+                        width: double.infinity,
+                        height: double.infinity,
+                        child: SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
                           child: Column(
-                            children: [
-                              Shimmer.fromColors(
-                                baseColor: Colors.grey,
-                                highlightColor: kInactiveTextColor,
-                                child: ShemmerCard(),
-                              ),
-                              Shimmer.fromColors(
-                                baseColor: Colors.grey,
-                                highlightColor: kInactiveTextColor,
-                                child: ShemmerCard(),
-                              ),
-                              Shimmer.fromColors(
-                                baseColor: Colors.grey,
-                                highlightColor: kInactiveTextColor,
-                                child: ShemmerCard(),
-                              ),
-                              Shimmer.fromColors(
-                                baseColor: Colors.grey,
-                                highlightColor: kInactiveTextColor,
-                                child: ShemmerCard(),
-                              ),
-                            ],
+                            children: Provider.of<TimeTable>(context)
+                                        .scheduleData ==
+                                    "Network Error"
+                                ? [
+                                    const SizedBox(
+                                      height: 200,
+                                    ),
+                                    const Text(
+                                      'Network Error!!',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 27,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    Text(
+                                      'If Any error then Contact Admin',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.grey.shade700,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RawMaterialButton(
+                                      onPressed: () async {
+                                        initialCall();
+                                      },
+                                      fillColor: Colors.grey.shade700,
+                                      constraints:
+                                          const BoxConstraints(minWidth: 10),
+                                      padding: const EdgeInsets.all(7),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: const Text(
+                                        'Refresh',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    )
+                                  ]
+                                : rowBuilder(
+                                    Provider.of<TimeTable>(context)
+                                        .scheduleData,
+                                  ),
                           ),
                         ),
-                ),
-              )),
+                      )
+                    : SizedBox(
+                        width: double.infinity,
+                        height: double.infinity,
+                        child: Column(
+                          children: [
+                            Shimmer.fromColors(
+                              baseColor: Colors.grey,
+                              highlightColor: kInactiveTextColor,
+                              child: const ShemmerCard(),
+                            ),
+                            Shimmer.fromColors(
+                              baseColor: Colors.grey,
+                              highlightColor: kInactiveTextColor,
+                              child: const ShemmerCard(),
+                            ),
+                            Shimmer.fromColors(
+                              baseColor: Colors.grey,
+                              highlightColor: kInactiveTextColor,
+                              child: const ShemmerCard(),
+                            ),
+                            Shimmer.fromColors(
+                              baseColor: Colors.grey,
+                              highlightColor: kInactiveTextColor,
+                              child: const ShemmerCard(),
+                            ),
+                          ],
+                        ),
+                      ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -477,7 +561,7 @@ class ShemmerCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                margin: EdgeInsets.symmetric(vertical: 3, horizontal: 0),
+                margin: const EdgeInsets.symmetric(vertical: 3, horizontal: 0),
                 width: 60,
                 height: 25,
                 decoration: BoxDecoration(
@@ -486,7 +570,7 @@ class ShemmerCard extends StatelessWidget {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 3, horizontal: 0),
+                margin: const EdgeInsets.symmetric(vertical: 3, horizontal: 0),
                 width: 100,
                 height: 25,
                 decoration: BoxDecoration(
@@ -495,7 +579,7 @@ class ShemmerCard extends StatelessWidget {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 3, horizontal: 0),
+                margin: const EdgeInsets.symmetric(vertical: 3, horizontal: 0),
                 width: 280,
                 height: 25,
                 decoration: BoxDecoration(

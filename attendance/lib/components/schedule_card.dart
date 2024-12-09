@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:attendance/Screen/SupportScreen/replace_faculty.dart';
 import 'package:attendance/constants.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +6,13 @@ class ScheduleCard extends StatefulWidget {
   final dynamic data;
   final VoidCallback onTap;
   final int index;
+  final bool isLongpressable;
   const ScheduleCard(
-      {super.key, required this.data, required this.onTap, this.index = 0});
+      {super.key,
+      required this.data,
+      required this.onTap,
+      this.index = 0,
+      this.isLongpressable = false});
 
   @override
   State<ScheduleCard> createState() => _ScheduleCardState();
@@ -24,27 +27,30 @@ class _ScheduleCardState extends State<ScheduleCard> {
         setState(() {
           selected = true;
         });
-        await showMenu(
-          position: RelativeRect.fromLTRB(0, 0, 0, 0),
-          items: <PopupMenuEntry>[
-            PopupMenuItem(
-              value: widget.index,
-              child: Row(
-                children: const <Widget>[
-                  Icon(Icons.person_add),
-                  Text("Replacement"),
+        widget.isLongpressable
+            ? await showMenu(
+                position: const RelativeRect.fromLTRB(0, 0, 0, 0),
+                items: <PopupMenuEntry>[
+                  PopupMenuItem(
+                    value: widget.index,
+                    child: const Row(
+                      children: <Widget>[
+                        Icon(Icons.person_add),
+                        Text("Replacement"),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Replacement(data: widget.data)));
+                    },
+                  )
                 ],
-              ),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Replacement(data: widget.data)));
-              },
-            )
-          ],
-          context: context,
-        );
+                context: context,
+              )
+            : "";
         setState(() {
           selected = false;
         });

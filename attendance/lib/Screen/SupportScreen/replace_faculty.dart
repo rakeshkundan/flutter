@@ -49,7 +49,7 @@ class _ReplacementState extends State<Replacement> {
               if (empCode.text == "") {
                 return;
               }
-              print(Provider.of<StateData>(context, listen: false).focusedDay);
+              // print(Provider.of<StateData>(context, listen: false).focusedDay);
               var data = {
                 "subject": widget.data,
                 "requested": empCode.text,

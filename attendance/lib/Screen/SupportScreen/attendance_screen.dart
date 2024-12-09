@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, avoid_print, must_be_immutable
-
 import 'dart:convert';
 
 import 'package:attendance/Data/profile_data.dart';
@@ -13,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable
 class AttendanceScreen extends StatelessWidget {
   static String id = 'attendance_screen';
   AttendanceScreen({super.key});
@@ -25,13 +24,14 @@ class AttendanceScreen extends StatelessWidget {
   List<Widget> studentList(List<Student> list, BuildContext context, var info) {
     List<Widget> data = [
       Padding(
-        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               "Mark All Absent",
-              style: TextStyle(
+              // ignore: unnecessary_const
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -51,7 +51,7 @@ class AttendanceScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: Text('Cancel'),
+                          child: const Text('Cancel'),
                         ),
                         TextButton(
                           onPressed: () async {
@@ -61,7 +61,7 @@ class AttendanceScreen extends StatelessWidget {
                             if (!context.mounted) return;
                             Navigator.pop(context);
                           },
-                          child: Text("Yes"),
+                          child: const Text("Yes"),
                         )
                       ],
                     ),
@@ -83,11 +83,11 @@ class AttendanceScreen extends StatelessWidget {
         ),
       );
     }
-    data.add(AbsentStudent());
+    data.add(const AbsentStudent());
     data.add(Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Text(
+        const Text(
           "Attendance Count:",
           style: TextStyle(
               fontSize: 17,
@@ -96,8 +96,8 @@ class AttendanceScreen extends StatelessWidget {
         ),
         DropdownButton(
           value: Provider.of<StateData>(context).getClassCount,
-          hint: Text("Set Count"),
-          items: [
+          hint: const Text("Set Count"),
+          items: const [
             DropdownMenuItem(
               value: 0,
               child: Text("0"),
@@ -128,20 +128,21 @@ class AttendanceScreen extends StatelessWidget {
     ));
     data.add(
       Container(
-        margin: EdgeInsets.symmetric(vertical: 20),
+        margin: const EdgeInsets.symmetric(vertical: 20),
         child: TextButton(
           onPressed: () {
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                title: Text('Submit Attendance'),
-                content: Text('Once submitted then It cannot be edited!!'),
+                title: const Text('Submit Attendance'),
+                content:
+                    const Text('Once submitted then It cannot be edited!!'),
                 actions: [
                   TextButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text('Cancel'),
+                    child: const Text('Cancel'),
                   ),
                   TextButton(
                     onPressed: () async {
@@ -164,6 +165,7 @@ class AttendanceScreen extends StatelessWidget {
                       var url =
                           Uri.parse('$kBaseLink/api/attendance/setAttendance');
                       if (!context.mounted) return;
+                      // ignore: unused_local_variable
                       var employeeId =
                           Provider.of<ProfileData>(context, listen: false)
                               .employeeId;
@@ -209,7 +211,7 @@ class AttendanceScreen extends StatelessWidget {
                       } else {
                         if (!context.mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text(
                               'Error!!',
                               style: TextStyle(color: Colors.red),
@@ -224,7 +226,7 @@ class AttendanceScreen extends StatelessWidget {
                       Navigator.pop(context);
                       Navigator.pop(context);
                     },
-                    child: Text('Yes'),
+                    child: const Text('Yes'),
                   )
                 ],
               ),
@@ -236,7 +238,7 @@ class AttendanceScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
             ),
           ),
-          child: Text(
+          child: const Text(
             "Send Attendance",
             style: TextStyle(
               fontSize: 20,
@@ -263,12 +265,12 @@ class AttendanceScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           Provider.of<StudentDetail>(context).subjectName,
-          style: TextStyle(fontSize: 17),
+          style: const TextStyle(fontSize: 17),
           textAlign: TextAlign.start,
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.only(right: 10),
             child: Text(Provider.of<StudentDetail>(context).sectionName),
           ),
         ],
@@ -302,21 +304,21 @@ class AbsentStudent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           '  Absent:',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
         ),
         Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           width: double.infinity,
-          margin: EdgeInsets.symmetric(horizontal: 10),
+          margin: const EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
               border: Border.all(color: Colors.black, width: 3),
               borderRadius: BorderRadius.circular(5)),
           child: Text(
             absentites(Provider.of<StudentDetail>(context).absenties),
             maxLines: 4,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w600,
             ),

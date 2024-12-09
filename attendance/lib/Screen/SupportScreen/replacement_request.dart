@@ -1,12 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 // import 'package:flutter/cupertino.dart';
 import 'dart:convert';
 
 import 'package:attendance/Utilities/networking.dart';
-import 'package:attendance/components/schedule_card.dart';
+// import 'package:attendance/components/schedule_card.dart';
 import 'package:attendance/constants.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,10 +30,10 @@ class _ReplacementRequestState extends State<ReplacementRequest> {
     // print(data);
     for (var item in data['list']) {
       list.add(Container(
-        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 20),
-        margin: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         decoration: BoxDecoration(
-          color: Color(0xD3D3D3D3),
+          color: const Color(0xD3D3D3D3),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
@@ -70,7 +68,43 @@ class _ReplacementRequestState extends State<ReplacementRequest> {
                       encoding: Encoding.getByName('utf-8'),
                     );
                     var resp = jsonDecode(response.body);
-                    print(resp);
+                    // print(resp);
+                    if (resp['message'] == "success") {
+                      if (!context.mounted) {
+                        return;
+                      }
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Alert!'),
+                            content: const Text('Requested successfully'),
+                            actions: [
+                              RawMaterialButton(
+                                highlightColor: Colors.transparent,
+                                splashColor: Colors.transparent,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    // color: kInactiveTextColor,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0, vertical: 7.0),
+                                  child: Text(
+                                    'Ok',
+                                    style: kAlertButtonTextStyle,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
                     setState(() {
                       isFetching = false;
                     });
@@ -82,7 +116,7 @@ class _ReplacementRequestState extends State<ReplacementRequest> {
                     ),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20.0, vertical: 7.0),
-                    child: Text(
+                    child: const Text(
                       'Accept',
                       style: TextStyle(
                         color: Colors.white,
@@ -99,6 +133,63 @@ class _ReplacementRequestState extends State<ReplacementRequest> {
                     setState(() {
                       isFetching = true;
                     });
+                    var data = {"id": item['id']};
+                    // print(data);
+                    String url = "$kBaseLink/api/timetable/rejectRequest";
+                    final SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    String auth = prefs.getString('authorization') ?? "";
+                    var response = await http.post(
+                      Uri.parse(url),
+                      headers: {
+                        "Accept": "*/*",
+                        "Content-Type": "application/json",
+                        "authorization": auth
+                      },
+                      body: jsonEncode(data),
+                      encoding: Encoding.getByName('utf-8'),
+                    );
+                    var resp = jsonDecode(response.body);
+                    // print(resp);
+                    if (resp['message'] == "success") {
+                      if (!context.mounted) {
+                        return;
+                      }
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Alert!'),
+                            content: const Text('Rejected!'),
+                            actions: [
+                              RawMaterialButton(
+                                highlightColor: Colors.transparent,
+                                splashColor: Colors.transparent,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    // color: kInactiveTextColor,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0, vertical: 7.0),
+                                  child: Text(
+                                    'Ok',
+                                    style: kAlertButtonTextStyle,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                    setState(() {
+                      isFetching = false;
+                    });
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -107,7 +198,7 @@ class _ReplacementRequestState extends State<ReplacementRequest> {
                     ),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20.0, vertical: 7.0),
-                    child: Text(
+                    child: const Text(
                       'Reject',
                       style: TextStyle(
                         color: Colors.white,
@@ -137,7 +228,7 @@ class _ReplacementRequestState extends State<ReplacementRequest> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Requests"),
+        title: const Text("Requests"),
       ),
       body: SafeArea(
         child: ModalProgressHUD(

@@ -1,10 +1,10 @@
 import 'package:attendance/Screen/SupportScreen/analysis_detail_finder.dart';
 import 'package:attendance/Screen/SupportScreen/attendance_download_screen.dart';
 import 'package:attendance/Screen/SupportScreen/replacement_request.dart';
-import 'package:attendance/Screen/SupportScreen/timetable_modify.dart';
+// import 'package:attendance/Screen/SupportScreen/timetable_modify.dart';
 import 'package:attendance/components/dashboard_card.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DashboardScreen extends StatelessWidget {
   static String id = "dashboard_screen";
@@ -48,13 +48,13 @@ class DashboardScreen extends StatelessWidget {
                     Navigator.pushNamed(context, ReplacementRequest.id);
                   },
                 ),
-                DashboardCard(
-                  onClick: () {
-                    Navigator.pushNamed(context, TimetableModify.id);
-                  },
-                  title: "TimeTable",
-                  icon: FontAwesomeIcons.calendarCheck,
-                ),
+                // DashboardCard(
+                //   onClick: () {
+                //     Navigator.pushNamed(context, TimetableModify.id);
+                //   },
+                //   title: "TimeTable",
+                //   icon: FontAwesomeIcons.calendarCheck,
+                // ),
               ],
             ),
           ),

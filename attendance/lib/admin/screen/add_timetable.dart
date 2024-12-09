@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'dart:convert';
 
 import 'package:attendance/components/input_box.dart';
@@ -43,10 +41,10 @@ class _AddTimetableState extends State<AddTimetable> {
               label: "Employee code",
             ),
             Container(
-              margin: EdgeInsets.all(15),
+              margin: const EdgeInsets.all(15),
               child: InputDecorator(
                 decoration: InputDecoration(
-                  label: Text(
+                  label: const Text(
                     "Day",
                     style: TextStyle(fontSize: 25),
                   ),
@@ -55,8 +53,8 @@ class _AddTimetableState extends State<AddTimetable> {
                   ),
                 ),
                 child: DropdownButton(
-                  underline: SizedBox(),
-                  style: TextStyle(
+                  underline: const SizedBox(),
+                  style: const TextStyle(
                       color: kInactiveTextColor,
                       fontSize: 20,
                       fontWeight: FontWeight.w500),
@@ -67,7 +65,7 @@ class _AddTimetableState extends State<AddTimetable> {
                       day = x!;
                     });
                   },
-                  items: [
+                  items: const [
                     DropdownMenuItem(
                       value: "0",
                       child: Text("Select Day"),
@@ -113,10 +111,10 @@ class _AddTimetableState extends State<AddTimetable> {
               label: "Branch (Like 'CSE')",
             ),
             Container(
-              margin: EdgeInsets.all(15),
+              margin: const EdgeInsets.all(15),
               child: InputDecorator(
                 decoration: InputDecoration(
-                  label: Text(
+                  label: const Text(
                     "Semester",
                     style: TextStyle(fontSize: 25),
                   ),
@@ -125,8 +123,8 @@ class _AddTimetableState extends State<AddTimetable> {
                   ),
                 ),
                 child: DropdownButton(
-                  underline: SizedBox(),
-                  style: TextStyle(
+                  underline: const SizedBox(),
+                  style: const TextStyle(
                       color: kInactiveTextColor,
                       fontSize: 20,
                       fontWeight: FontWeight.w500),
@@ -137,7 +135,7 @@ class _AddTimetableState extends State<AddTimetable> {
                     });
                   },
                   value: semValue,
-                  items: [
+                  items: const [
                     DropdownMenuItem(
                       value: "x",
                       child: Text("Select Semester"),
@@ -183,10 +181,10 @@ class _AddTimetableState extends State<AddTimetable> {
               label: "Timing (Like:12:00-1:00PM)",
             ),
             Container(
-              margin: EdgeInsets.all(15),
+              margin: const EdgeInsets.all(15),
               child: InputDecorator(
                 decoration: InputDecoration(
-                  label: Text(
+                  label: const Text(
                     "Section",
                     style: TextStyle(fontSize: 25),
                   ),
@@ -195,8 +193,8 @@ class _AddTimetableState extends State<AddTimetable> {
                   ),
                 ),
                 child: DropdownButton(
-                  underline: SizedBox(),
-                  style: TextStyle(
+                  underline: const SizedBox(),
+                  style: const TextStyle(
                       color: kInactiveTextColor,
                       fontSize: 20,
                       fontWeight: FontWeight.w500),
@@ -207,7 +205,7 @@ class _AddTimetableState extends State<AddTimetable> {
                       section = x!;
                     });
                   },
-                  items: [
+                  items: const [
                     DropdownMenuItem(
                       value: "",
                       child: Text("Section"),
@@ -249,20 +247,20 @@ class _AddTimetableState extends State<AddTimetable> {
               label: "Session(like:2021-25)",
             ),
             Container(
-              margin: EdgeInsets.symmetric(vertical: 20),
+              margin: const EdgeInsets.symmetric(vertical: 20),
               child: TextButton(
                 onPressed: () {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: Text('Add Timetable'),
-                      content: Text('Are you Sure?'),
+                      title: const Text('Add Timetable'),
+                      content: const Text('Are you Sure?'),
                       actions: [
                         TextButton(
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: Text('Cancel'),
+                          child: const Text('Cancel'),
                         ),
                         TextButton(
                           onPressed: () async {
@@ -278,7 +276,7 @@ class _AddTimetableState extends State<AddTimetable> {
                               "session": session.text,
                               "course": course.text
                             };
-                            print(data);
+                            // print(data);
 
                             final SharedPreferences prefs =
                                 await SharedPreferences.getInstance();
@@ -302,7 +300,7 @@ class _AddTimetableState extends State<AddTimetable> {
                             if (!context.mounted) return;
                             Navigator.pop(context);
                           },
-                          child: Text('Yes'),
+                          child: const Text('Yes'),
                         )
                       ],
                     ),
@@ -314,7 +312,7 @@ class _AddTimetableState extends State<AddTimetable> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   "Add Timetable",
                   style: TextStyle(
                     fontSize: 20,

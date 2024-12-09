@@ -5,7 +5,7 @@ class TimeTable extends ChangeNotifier {
   Future<void> setSchedule(dynamic data) async {
     // print(data['TimeTable']);
     if (data != "Network Error") {
-      scheduleData = data['TimeTable'];
+      scheduleData = data;
     } else {
       scheduleData = data;
     }
