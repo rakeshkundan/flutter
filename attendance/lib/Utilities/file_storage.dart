@@ -68,7 +68,8 @@ class FileStorage {
     var newAuth = Uri.encodeFull(auth!);
     // print(Uri.encodeFull(
     //     '$kBaseLink/api/attendance/downloadAttendance/?subjectId=${data['subject']}&session=${data['session']}&branch=${data['branch']}&section=${data['section']}&authorization=$auth'));
-
+    print(
+        '$kBaseLink/api/attendance/downloadAttendance/?subjectId=${data['subject']}&session=${data['session']}&branch=${data['branch']}&section=${data['section']}&authorization=$newAuth');
     final core = await Flowder.download(
         Uri.encodeFull(
             '$kBaseLink/api/attendance/downloadAttendance/?subjectId=${data['subject']}&session=${data['session']}&branch=${data['branch']}&section=${data['section']}&authorization=$newAuth'),

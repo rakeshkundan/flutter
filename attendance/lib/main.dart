@@ -28,6 +28,8 @@ import 'package:attendance/admin/screen/add_timetable.dart';
 import 'package:attendance/admin/screen/admin_home_page.dart';
 import 'package:attendance/admin/screen/edit_data_page.dart';
 import 'package:attendance/admin/screen/modify_timetable_page.dart';
+import 'package:attendance/admin/screen/remove_class.dart';
+import 'package:attendance/admin/screen/upload_student_list.dart';
 import 'package:attendance/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -82,7 +84,9 @@ class MyApp extends StatelessWidget {
           Setting.id: (context) => Setting(),
           AdminsHomePage.id: (context) => AdminsHomePage(),
           ModifyTimetable.id: (context) => ModifyTimetable(),
+          RemoveClass.id: (context) => RemoveClass(),
           AddTimetable.id: (context) => AddTimetable(),
+          StudentListUpload.id: (context) => StudentListUpload(),
           EditDataPage.id: (context) => EditDataPage(),
           Replacement.id: (context) => Replacement(),
           ReplacementRequest.id: (context) => ReplacementRequest(),

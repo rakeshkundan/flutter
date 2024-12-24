@@ -20,9 +20,9 @@ class _AddTimetableState extends State<AddTimetable> {
   TextEditingController branch = TextEditingController();
   TextEditingController timing = TextEditingController();
   TextEditingController location = TextEditingController();
-  TextEditingController course = TextEditingController();
+  // TextEditingController course = TextEditingController();
   TextEditingController session = TextEditingController();
-  String semValue = "x", section = "";
+  String semValue = "x", section = "", course = "0";
   String day = "0";
   @override
   Widget build(BuildContext context) {
@@ -105,9 +105,11 @@ class _AddTimetableState extends State<AddTimetable> {
             InputBox(
               textController: subCode,
               label: "Subject Code(Like 'CSE321')",
+              textCapital: true,
             ),
             InputBox(
               textController: branch,
+              textCapital: true,
               label: "Branch (Like 'CSE')",
             ),
             Container(
@@ -141,35 +143,35 @@ class _AddTimetableState extends State<AddTimetable> {
                       child: Text("Select Semester"),
                     ),
                     DropdownMenuItem(
-                      value: "i",
+                      value: "I",
                       child: Text("I"),
                     ),
                     DropdownMenuItem(
-                      value: "ii",
+                      value: "II",
                       child: Text("II"),
                     ),
                     DropdownMenuItem(
-                      value: "iii",
+                      value: "III",
                       child: Text("III"),
                     ),
                     DropdownMenuItem(
-                      value: "iv",
+                      value: "IV",
                       child: Text("IV"),
                     ),
                     DropdownMenuItem(
-                      value: "v",
+                      value: "V",
                       child: Text("V"),
                     ),
                     DropdownMenuItem(
-                      value: "vi",
+                      value: "VI",
                       child: Text("VI"),
                     ),
                     DropdownMenuItem(
-                      value: "vii",
+                      value: "VII",
                       child: Text("VII"),
                     ),
                     DropdownMenuItem(
-                      value: "viii",
+                      value: "VIII",
                       child: Text("VIII"),
                     ),
                   ],
@@ -236,11 +238,53 @@ class _AddTimetableState extends State<AddTimetable> {
             ),
             InputBox(
               textController: location,
-              label: "Location",
+              label: "Location(class Location)",
             ),
-            InputBox(
-              textController: course,
-              label: "Course (Like:B-tech)",
+            // InputBox(
+            //   textController: course,
+            //   label: "Course (Like:B-tech)",
+            // ),
+            Container(
+              margin: const EdgeInsets.all(15),
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  label: const Text(
+                    "Course",
+                    style: TextStyle(fontSize: 25),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                child: DropdownButton(
+                  underline: const SizedBox(),
+                  style: const TextStyle(
+                      color: kInactiveTextColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500),
+                  isExpanded: true,
+                  value: course,
+                  onChanged: (x) {
+                    setState(() {
+                      course = x!;
+                    });
+                  },
+                  items: const [
+                    DropdownMenuItem(
+                      value: "0",
+                      child: Text("Select  Course"),
+                    ),
+                    DropdownMenuItem(
+                      value: "B-Tech",
+                      child: Text("B-Tech"),
+                    ),
+                    DropdownMenuItem(
+                      value: "M-Tech",
+                      child: Text("M-Tech"),
+                    ),
+                  ],
+                ),
+              ),
             ),
             InputBox(
               textController: session,
@@ -274,7 +318,7 @@ class _AddTimetableState extends State<AddTimetable> {
                               "section": section,
                               "location": location.text,
                               "session": session.text,
-                              "course": course.text
+                              "course": course
                             };
                             // print(data);
 

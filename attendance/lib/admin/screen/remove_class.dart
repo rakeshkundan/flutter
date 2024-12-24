@@ -1,8 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_null_comparison
 
-import 'dart:async';
 import 'dart:convert';
-import 'package:attendance/admin/screen/edit_data_page.dart';
 import 'package:attendance/components/input_box.dart';
 import 'package:attendance/components/schedule_card.dart';
 import 'package:http/http.dart' as http;
@@ -11,24 +9,19 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ModifyTimetable extends StatefulWidget {
-  static String id = 'modify_timetable_page';
-  const ModifyTimetable({super.key});
+class RemoveClass extends StatefulWidget {
+  static String id = 'remove_class';
+  const RemoveClass({super.key});
 
   @override
-  State<ModifyTimetable> createState() => _ModifyTimetableState();
+  State<RemoveClass> createState() => _RemoveClassState();
 }
 
-class _ModifyTimetableState extends State<ModifyTimetable> {
+class _RemoveClassState extends State<RemoveClass> {
   TextEditingController employeeCode = TextEditingController();
   bool loading = false;
   String day = "";
   List<Widget> list = [];
-  FutureOr onGoBack(dynamic value) {
-    scheduleMaker(context);
-    setState(() {});
-  }
-
   Future<void> scheduleMaker(BuildContext context) async {
     setState(() {
       loading = true;
@@ -60,19 +53,53 @@ class _ModifyTimetableState extends State<ModifyTimetable> {
         list.add(
           ScheduleCard(
             data: item,
-            onTap: () {
+            onTap: () async {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Remove Class'),
+                  content: const Text('Are you Sure?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        final SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        String? authorization =
+                            prefs.getString('authorization');
+                        var response = await http.post(
+                          Uri.parse("$kAdminPath/removeTimeTable"),
+                          headers: {
+                            "Accept": "*/*",
+                            "Content-Type": "application/json",
+                            "authorization": authorization ?? "",
+                          },
+                          body: jsonEncode({
+                            "item": item,
+                            "employeeCode": employeeCode.text,
+                            "day": day,
+                          }),
+                          encoding: Encoding.getByName('utf-8'),
+                        );
+                        // print(response.body);
+                        if (response.statusCode == 200) {
+                          if (!context.mounted) return;
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: const Text('Yes'),
+                    )
+                  ],
+                ),
+              );
+
               // Navigator.pushNamed(context, EditDataPage.id,
               // arguments: {"employeeCode": employeeCode.text, "data": item});
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditDataPage(
-                    employeeCode: employeeCode.text,
-                    data: item,
-                    day: day,
-                  ),
-                ),
-              ).then(onGoBack);
             },
           ),
         );
@@ -87,7 +114,7 @@ class _ModifyTimetableState extends State<ModifyTimetable> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Modify Timetable"),
+          title: Text("Remove Class"),
         ),
         body: ModalProgressHUD(
           inAsyncCall: loading,

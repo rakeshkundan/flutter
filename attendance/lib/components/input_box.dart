@@ -1,17 +1,22 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
 
 class InputBox extends StatelessWidget {
   final String label;
   final TextEditingController textController;
   final bool obscText;
+  final bool textCapital;
+  final bool read;
 
   const InputBox({
     super.key,
     this.label = "label",
     required this.textController,
     this.obscText = false,
+    this.textCapital = false,
+    this.read = false,
   });
 
   @override
@@ -21,6 +26,10 @@ class InputBox extends StatelessWidget {
       child: TextFormField(
         obscureText: obscText,
         controller: textController,
+        readOnly: read,
+        textCapitalization: textCapital
+            ? TextCapitalization.characters
+            : TextCapitalization.none,
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
           labelText: label,

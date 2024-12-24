@@ -4,6 +4,8 @@ import 'package:attendance/Screen/initial_screen.dart';
 import 'package:attendance/Utilities/global_functions.dart';
 import 'package:attendance/admin/screen/add_timetable.dart';
 import 'package:attendance/admin/screen/modify_timetable_page.dart';
+import 'package:attendance/admin/screen/remove_class.dart';
+import 'package:attendance/admin/screen/upload_student_list.dart';
 import 'package:attendance/components/dashboard_card.dart';
 import 'package:attendance/constants.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +51,16 @@ class _AdminsHomePageState extends State<AdminsHomePage> {
               DashboardCard(
                 icon: Icons.remove_circle_outline,
                 title: "Remove Class",
-                onClick: () {},
+                onClick: () {
+                  Navigator.pushNamed(context, RemoveClass.id);
+                },
+              ),
+              DashboardCard(
+                icon: Icons.upload_file,
+                title: "Upload Student List",
+                onClick: () {
+                  Navigator.pushNamed(context, StudentListUpload.id);
+                },
               ),
               DashboardCard(
                 icon: Icons.logout,
@@ -153,7 +164,7 @@ class _AdminsHomePageState extends State<AdminsHomePage> {
                     },
                   );
                 },
-              )
+              ),
             ],
           ),
         ),

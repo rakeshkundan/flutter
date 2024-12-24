@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
 
+// const kDebugMode = false;
 const kInactiveTextColor = Color(0xFF505052);
-// String kBaseLink =
-//     Platform.isIOS ? 'http://10.3.1.6:8080' : 'http://10.3.1.6:8080';
-// String kScheduleLink = Platform.isIOS
-//     ? 'http://10.3.1.6:8080/api/timetable/timeTable'
-//     : 'http://10.3.1.6:8080/api/timetable/timeTable';
+// String kBaseLink = 'http://10.3.1.58:5004';
+// String kScheduleLink = 'http://10.3.1.58:5004/api/timetable/timeTable';
 
+//
 String kBaseLink =
     Platform.isIOS ? 'http://localhost:3000' : 'http://10.0.2.2:3000';
 String kScheduleLink = Platform.isIOS
     ? 'http://localhost:3000/api/timetable/timeTable'
     : 'http://10.0.2.2:3000/api/timetable/timeTable';
 String kAdminPath = Platform.isIOS
-    ? 'http://localhost:8080/api/admin/'
-    : 'http://10.0.2.2:8080/api/admin/';
+    ? 'http://localhost:3000/api/admin'
+    : 'http://10.0.2.2:3000/api/admin';
 
 // String kBaseLink = Platform.isIOS
 //     ? 'http://122.175.151.80:3000'

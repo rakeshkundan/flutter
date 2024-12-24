@@ -54,83 +54,89 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     List<Widget> list = [];
     //print(schedule);
     int i = 0;
-    for (var item in schedule['TimeTable']) {
-      // print(item);
-      list.add(
-        ScheduleCard(
-          index: i,
-          data: item,
-          onTap: () async {
-            String date = Provider.of<StateData>(context, listen: false)
-                .focusedDay
-                .toString()
-                .split(' ')[0];
-            String dateTime = item['timing'] + " " + date;
-            Provider.of<TimeTable>(context, listen: false).setProgressBar(true);
-            String? subjectId = item['subject']['_id'];
-            var isElective = item['subject']['isElective'];
-            NetworkHelper nethelp = NetworkHelper(
-              url:
-                  '$kBaseLink/api/Student/getStudentList?branch=${item["branch"]}&section=${item["section"]}&batch=${item["session"]}&isElective=$isElective&subjectId=$subjectId&dateTime=$dateTime',
-              head: true,
-            );
-            var data = await nethelp.getData();
-            // print(data['message']);
-            if (data == 'Network Error') {
-              // print('Error');
-            } else if (data is List) {
-              if (!mounted) return;
-              await Provider.of<StudentDetail>(context, listen: false).setData({
-                "subCode": item['subject']['subjectCode'],
-                "data": data,
-                "section": item['section'],
-              });
-              if (!mounted) return;
-              Provider.of<StudentDetail>(context, listen: false).subjectName =
-                  item['subject']['subjectName'];
-
-              // print(date);
-              if (!mounted) return;
-              Navigator.pushNamed(
-                context,
-                AttendanceScreen.id,
-                arguments: {
-                  'data': {
-                    "subjectCode": item['subject']['subjectCode'],
-                    'section': item['section'],
-                    "branch": item['branch'],
-                    "subjectId": subjectId,
-                    "dateTime": dateTime,
-                  }
-                },
+    if (schedule['TimeTable'] is List) {
+      for (var item in schedule['TimeTable']) {
+        // print(item);
+        list.add(
+          ScheduleCard(
+            index: i,
+            data: item,
+            onTap: () async {
+              String date = Provider.of<StateData>(context, listen: false)
+                  .focusedDay
+                  .toString()
+                  .split(' ')[0];
+              String dateTime = '${item['timing']} $date';
+              Provider.of<TimeTable>(context, listen: false)
+                  .setProgressBar(true);
+              String? subjectId = item['subject']['_id'];
+              var isElective = item['subject']['isElective'];
+              NetworkHelper nethelp = NetworkHelper(
+                url:
+                    '$kBaseLink/api/Student/getStudentList?branch=${item["branch"]}&section=${item["section"]}&batch=${item["session"]}&isElective=$isElective&subjectId=$subjectId&dateTime=$dateTime',
+                head: true,
               );
-            } else if (data['message'] == "already Filled") {
-              if (!mounted) return;
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Alert!'),
-                  content: const Text('Attendance is already submitted'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Ok'),
-                    ),
-                  ],
-                ),
-              );
-            }
+              var data = await nethelp.getData();
+              // print(data['message']);
+              if (data == 'Network Error') {
+                // print('Error');
+              } else if (data is List) {
+                if (!mounted) return;
+                await Provider.of<StudentDetail>(context, listen: false)
+                    .setData({
+                  "subCode": item['subject']['subjectCode'],
+                  "data": data,
+                  "section": item['section'],
+                });
+                if (!mounted) return;
+                Provider.of<StudentDetail>(context, listen: false).subjectName =
+                    item['subject']['subjectName'];
 
-            if (!mounted) return;
-            Provider.of<TimeTable>(context, listen: false)
-                .setProgressBar(false);
-          },
-          isLongpressable: true,
-        ),
-      );
-      i++;
+                // print(date);
+                if (!mounted) return;
+                Navigator.pushNamed(
+                  context,
+                  AttendanceScreen.id,
+                  arguments: {
+                    'data': {
+                      "subjectCode": item['subject']['subjectCode'],
+                      'section': item['section'],
+                      "branch": item['branch'],
+                      "subjectId": subjectId,
+                      "dateTime": dateTime,
+                    }
+                  },
+                );
+              } else if (data['message'] == "already Filled") {
+                if (!mounted) return;
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Alert!'),
+                    content: const Text('Attendance is already submitted'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Ok'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              if (!mounted) return;
+              Provider.of<TimeTable>(context, listen: false)
+                  .setProgressBar(false);
+            },
+            isLongpressable: true,
+          ),
+        );
+        i++;
+      }
+    } else {
+      throw Exception('Expected a list in schedule["TimeTable"]');
     }
     list.add(const Text(
       "Temporary Assigned",
@@ -140,82 +146,90 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         decoration: TextDecoration.underline,
       ),
     ));
-    for (var item in schedule['Temporary']) {
-      // print(item);
-      list.add(
-        ScheduleCard(
-          index: i,
-          data: item,
-          onTap: () async {
-            String date = Provider.of<StateData>(context, listen: false)
-                .focusedDay
-                .toString()
-                .split(' ')[0];
-            String dateTime = item['timing'] + " " + date;
-            Provider.of<TimeTable>(context, listen: false).setProgressBar(true);
-            String? subjectId = item['subject']['_id'];
-            var isElective = item['subject']['isElective'];
-            NetworkHelper nethelp = NetworkHelper(
-              url:
-                  '$kBaseLink/api/Student/getStudentList?branch=${item["branch"]}&section=${item["section"]}&batch=${item["session"]}&isElective=$isElective&subjectId=$subjectId&dateTime=$dateTime&temp=1',
-              head: true,
-            );
-            var data = await nethelp.getData();
-            // print(data['message']);
-            if (data == 'Network Error') {
-              // print('Error');
-            } else if (data is List) {
-              if (!mounted) return;
-              await Provider.of<StudentDetail>(context, listen: false).setData({
-                "subCode": item['subject']['subjectCode'],
-                "data": data,
-                "section": item['section'],
-              });
-              if (!mounted) return;
-              Provider.of<StudentDetail>(context, listen: false).subjectName =
-                  item['subject']['subjectName'];
-
-              // print(date);
-              if (!mounted) return;
-              Navigator.pushNamed(
-                context,
-                AttendanceScreen.id,
-                arguments: {
-                  'data': {
-                    "subjectCode": item['subject']['subjectCode'],
-                    'section': item['section'],
-                    "branch": item['branch'],
-                    "subjectId": subjectId,
-                    "dateTime": dateTime,
-                  }
-                },
+    if (schedule['Temporary'] is List) {
+      for (var item in schedule['Temporary']) {
+        // print(item);
+        list.add(
+          ScheduleCard(
+            index: i,
+            data: item,
+            onTap: () async {
+              String date = Provider.of<StateData>(context, listen: false)
+                  .focusedDay
+                  .toString()
+                  .split(' ')[0];
+              String dateTime = '${item['timing']} $date';
+              Provider.of<TimeTable>(context, listen: false)
+                  .setProgressBar(true);
+              String? subjectId = item['subject']['_id'];
+              var isElective = item['subject']['isElective'];
+              NetworkHelper nethelp = NetworkHelper(
+                url:
+                    '$kBaseLink/api/Student/getStudentList?branch=${item["branch"]}&section=${item["section"]}&batch=${item["session"]}&isElective=$isElective&subjectId=$subjectId&dateTime=$dateTime&temp=1',
+                head: true,
               );
-            } else if (data['message'] == "already Filled") {
-              if (!mounted) return;
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Alert!'),
-                  content: const Text('Attendance is already submitted'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Ok'),
-                    ),
-                  ],
-                ),
-              );
-            }
+              var data = await nethelp.getData();
+              // print(data['message']);
+              if (data == 'Network Error') {
+                // print('Error');
+              } else if (data is List) {
+                if (!mounted) return;
+                await Provider.of<StudentDetail>(context, listen: false)
+                    .setData({
+                  "subCode": item['subject']['subjectCode'],
+                  "data": data,
+                  "section": item['section'],
+                });
+                if (!mounted) return;
+                Provider.of<StudentDetail>(context, listen: false).subjectName =
+                    item['subject']['subjectName'];
 
-            if (!mounted) return;
-            Provider.of<TimeTable>(context, listen: false)
-                .setProgressBar(false);
-          },
-        ),
-      );
-      i++;
+                // print(date);
+                if (!mounted) return;
+                Navigator.pushNamed(
+                  context,
+                  AttendanceScreen.id,
+                  arguments: {
+                    'data': {
+                      "subjectCode": item['subject']['subjectCode'],
+                      'section': item['section'],
+                      "branch": item['branch'],
+                      "subjectId": subjectId,
+                      "dateTime": dateTime,
+                    }
+                  },
+                );
+              } else if (data['message'] == "already Filled") {
+                if (!mounted) return;
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Alert!'),
+                    content: const Text('Attendance is already submitted'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Ok'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              if (!mounted) return;
+              Provider.of<TimeTable>(context, listen: false)
+                  .setProgressBar(false);
+            },
+          ),
+        );
+        i++;
+      }
+    } else {
+      if (kDebugMode) {
+        print('Expected schedule["Temporary"] to be a list');
+      }
     }
 
     if (list.length == 1) {
